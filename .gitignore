@@ -1,0 +1,10 @@
+*
+!.gitignore
+!README.md
+
+!*/
+!*/*.[ch]
+!*/*.asm
+!*/*.md
+!*/*.sh
+!*/Makefile
