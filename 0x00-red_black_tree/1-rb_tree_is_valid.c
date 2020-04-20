@@ -54,9 +54,9 @@ int check_rb_tree(const rb_tree_t *tree, size_t black_count)
 	if (tree->color == BLACK)
 		++black_count;
 	if (!check_rb_tree(tree->left, black_count) ||
-			!check_rb_tree(tree->right, black_count) ||
-			((!tree->left || !tree->right) &&
-			 black_count != MAX_BLACK))
+			!check_rb_tree(tree->right, black_count))
+		return (0);
+	if ((!tree->left || !tree->right) && black_count != MAX_BLACK)
 		return (0);
 	return (1);
 }
