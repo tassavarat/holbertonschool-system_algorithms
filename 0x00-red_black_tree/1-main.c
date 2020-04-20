@@ -41,6 +41,16 @@ rb_tree_t *not_valid_rb(void)
 	return (root);
 }
 
+rb_tree_t *not_valid_rb2(void)
+{
+	rb_tree_t *root;
+
+	root = rb_tree_node(NULL, 30, BLACK);
+	root->left = rb_tree_node(root, 20, BLACK);
+	root->left->left = rb_tree_node(root->left, 10, BLACK);
+	return (root);
+}
+
 /**
  * main - Entry point
  *
@@ -62,6 +72,11 @@ int main(void)
 	printf("Is %d valid: %d\n", root->n, valid);
 
 	root->color = RED;
+	rb_tree_print(root);
+	valid = rb_tree_is_valid(root);
+	printf("Is %d valid: %d\n", root->n, valid);
+
+	root = not_valid_rb2();
 	rb_tree_print(root);
 	valid = rb_tree_is_valid(root);
 	printf("Is %d valid: %d\n", root->n, valid);
