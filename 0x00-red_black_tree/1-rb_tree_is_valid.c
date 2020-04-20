@@ -12,10 +12,7 @@ int key_fail(const rb_tree_t *cur)
 {
 	if ((cur->left && cur->left->n > cur->n) ||
 			(cur->right && cur->right->n < cur->n))
-	{
-		/* puts("key fail"); */
 		return (1);
-	}
 	return (0);
 }
 
@@ -28,18 +25,12 @@ int key_fail(const rb_tree_t *cur)
 int colour_fail(const rb_tree_t *cur)
 {
 	if (cur->color != RED && cur->color != BLACK)
-	{
-		/* puts("invalid colour"); */
 		return (1);
-	}
 	if (cur->color == RED &&
 			((cur->parent && cur->parent->color == RED) ||
 			 (cur->left && cur->left->color == RED) ||
 			 (cur->right && cur->right->color == RED)))
-	{
-		/* puts("adjacent red node"); */
 		return (1);
-	}
 	return (0);
 }
 
@@ -62,20 +53,11 @@ int check_rb_tree(const rb_tree_t *tree, size_t black_count)
 		return (0);
 	if (tree->color == BLACK)
 		++black_count;
-	/* printf("tree->n %i\tblack_count %lu\tMAX_BLACK %lu\n", */
-	/*		tree->n, black_count, MAX_BLACK); */
 	if (!check_rb_tree(tree->left, black_count) ||
 			!check_rb_tree(tree->right, black_count) ||
 			((!tree->left || !tree->right) &&
 			 black_count != MAX_BLACK))
 		return (0);
-	/* if ((!tree->left || !tree->right) && black_count != MAX_BLACK) */
-	/* { */
-	/*	printf("count difference: tree->n %i\tblack_count" */
-	/*			"%lu\tMAX_BLACK %lu\n", */
-	/*			tree->n, black_count, MAX_BLACK); */
-	/*	return (0); */
-	/* } */
 	return (1);
 }
 
@@ -90,11 +72,7 @@ int rb_tree_is_valid(const rb_tree_t *tree)
 	size_t black_count;
 
 	if (!tree || tree->color != BLACK)
-	{
-		/* puts("invalid tree / root colour"); */
 		return (0);
-	}
-	black_count = 0;
-	MAX_BLACK = 0;
+	black_count = MAX_BLACK = 0;
 	return (check_rb_tree(tree, black_count));
 }
