@@ -5,21 +5,6 @@
 #include <stdlib.h>
 
 /**
- * struct stack - stack to traverse red-black tree
- * @black_count: current count of black nodes
- * @node: pointer to red-black tree node
- * @prev: pointer to previous node
- * @next: pointer to next node
- */
-typedef struct stack
-{
-	int black_count;
-	struct rb_tree_s *node;
-	struct stack *prev;
-	struct stack *next;
-} stack;
-
-/**
  * enum rb_color_e - Possible color of a Red-Black tree
  *
  * @RED: 0 -> Red node
