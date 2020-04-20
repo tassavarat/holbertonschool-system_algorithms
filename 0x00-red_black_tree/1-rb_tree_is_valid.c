@@ -1,6 +1,6 @@
 #include "rb_trees.h"
 
-static size_t MAX_BLACK;
+static size_t max_black;
 
 /**
  * key_fail - checks if valid binary search tree
@@ -45,8 +45,8 @@ int check_rb_tree(const rb_tree_t *tree, size_t black_count)
 {
 	if (!tree)
 	{
-		if (!MAX_BLACK)
-			MAX_BLACK = black_count;
+		if (!max_black)
+			max_black = black_count;
 		return (1);
 	}
 	if (colour_fail(tree) || key_fail(tree))
@@ -56,7 +56,7 @@ int check_rb_tree(const rb_tree_t *tree, size_t black_count)
 	if (!check_rb_tree(tree->left, black_count) ||
 			!check_rb_tree(tree->right, black_count))
 		return (0);
-	if ((!tree->left || !tree->right) && black_count != MAX_BLACK)
+	if ((!tree->left || !tree->right) && black_count != max_black)
 		return (0);
 	return (1);
 }
@@ -73,6 +73,6 @@ int rb_tree_is_valid(const rb_tree_t *tree)
 
 	if (!tree || tree->color != BLACK)
 		return (0);
-	black_count = MAX_BLACK = 0;
+	black_count = max_black = 0;
 	return (check_rb_tree(tree, black_count));
 }
