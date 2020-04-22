@@ -103,6 +103,9 @@ void repair_rb_runcle(rb_tree_t **tree, rb_tree_t *node)
 	{
 		node = node->parent;
 		rotl(tree, node);
+	}
+	else
+	{
 		node->parent->color = BLACK;
 		node->parent->parent->color = RED;
 		rotr(tree, node->parent->parent);
