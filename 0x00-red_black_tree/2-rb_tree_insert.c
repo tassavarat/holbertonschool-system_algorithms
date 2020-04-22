@@ -129,8 +129,7 @@ void repair_rb(rb_tree_t **tree, rb_tree_t *node)
 {
 	while (node->parent && node->parent->color == RED)
 	{
-		if (node->parent->parent &&
-				node->parent == node->parent->parent->left)
+		if (node->parent == node->parent->parent->left)
 			node = repair_rb_runcle(tree, node);
 		else
 			node = repair_rb_luncle(tree, node);
