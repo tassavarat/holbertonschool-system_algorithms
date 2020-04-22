@@ -150,6 +150,7 @@ rb_tree_t *insert_rb(rb_tree_t **tree, int value)
 {
 	rb_tree_t *cur, *prev, *new;
 
+	prev = NULL;
 	cur = *tree;
 	while (cur)
 	{
