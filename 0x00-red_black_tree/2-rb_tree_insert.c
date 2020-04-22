@@ -129,7 +129,8 @@ void repair_rb(rb_tree_t **tree, rb_tree_t *node)
 {
 	while (node->parent && node->parent->color == RED)
 	{
-		if (node->parent == node->parent->parent->left)
+		if (node->parent->parent &&
+				node->parent == node->parent->parent->left)
 			node = repair_rb_runcle(tree, node);
 		else
 			node = repair_rb_luncle(tree, node);
@@ -152,13 +153,13 @@ rb_tree_t *insert_rb(rb_tree_t **tree, int value)
 	cur = *tree;
 	while (cur)
 	{
-		if (value == cur->n)
-			return (NULL);
 		prev = cur;
 		if (value < cur->n)
 			cur = cur->left;
-		else
+		else if (value > cur->n)
 			cur = cur->right;
+		else
+			return (NULL);
 	}
 	new = rb_tree_node(NULL, value, RED);
 	if (!new)
