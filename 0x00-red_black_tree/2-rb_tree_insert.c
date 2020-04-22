@@ -56,8 +56,10 @@ void rotl(rb_tree_t **tree, rb_tree_t *node)
  * repair_rb_luncle - uncle of node is to the left
  * @tree: double pointer to root node
  * @node: pointer to node where violation detected
+ *
+ * Return: pointer to node
  */
-void repair_rb_luncle(rb_tree_t **tree, rb_tree_t *node)
+rb_tree_t *repair_rb_luncle(rb_tree_t **tree, rb_tree_t *node)
 {
 	rb_tree_t *grandparent, *uncle = node->parent->parent->left;
 
@@ -80,14 +82,17 @@ void repair_rb_luncle(rb_tree_t **tree, rb_tree_t *node)
 		node->parent->parent->color = RED;
 		rotl(tree, node->parent->parent);
 	}
+	return (node);
 }
 
 /**
  * repair_rb_runcle - uncle of node is to the right
  * @tree: double pointer to root node
  * @node: pointer to node where violation detected
+ *
+ * Return: pointer to node
  */
-void repair_rb_runcle(rb_tree_t **tree, rb_tree_t *node)
+rb_tree_t *repair_rb_runcle(rb_tree_t **tree, rb_tree_t *node)
 {
 	rb_tree_t *grandparent, *uncle = node->parent->parent->right;
 
@@ -110,6 +115,7 @@ void repair_rb_runcle(rb_tree_t **tree, rb_tree_t *node)
 		node->parent->parent->color = RED;
 		rotr(tree, node->parent->parent);
 	}
+	return (node);
 }
 
 /**
@@ -125,9 +131,9 @@ void repair_rb(rb_tree_t **tree, rb_tree_t *node)
 	{
 		if (node->parent->parent &&
 				node->parent == node->parent->parent->left)
-			repair_rb_runcle(tree, node);
+			node = repair_rb_runcle(tree, node);
 		else
-			repair_rb_luncle(tree, node);
+			node = repair_rb_luncle(tree, node);
 	}
 	(*tree)->color = BLACK;
 }
