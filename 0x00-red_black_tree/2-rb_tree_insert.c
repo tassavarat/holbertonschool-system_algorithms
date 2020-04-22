@@ -69,13 +69,13 @@ void repair_rb_luncle(rb_tree_t **tree, rb_tree_t *node)
 		grandparent->color = RED;
 		node = grandparent;
 	}
-	else if (node == node->parent->left)
-	{
-		node = node->parent;
-		rotr(tree, node);
-	}
 	else
 	{
+		if (node == node->parent->left)
+		{
+			node = node->parent;
+			rotr(tree, node);
+		}
 		node->parent->color = BLACK;
 		node->parent->parent->color = RED;
 		rotl(tree, node->parent->parent);
@@ -99,13 +99,13 @@ void repair_rb_runcle(rb_tree_t **tree, rb_tree_t *node)
 		grandparent->color = RED;
 		node = grandparent;
 	}
-	else if (node == node->parent->right)
-	{
-		node = node->parent;
-		rotl(tree, node);
-	}
 	else
 	{
+		if (node == node->parent->right)
+		{
+			node = node->parent;
+			rotl(tree, node);
+		}
 		node->parent->color = BLACK;
 		node->parent->parent->color = RED;
 		rotr(tree, node->parent->parent);
