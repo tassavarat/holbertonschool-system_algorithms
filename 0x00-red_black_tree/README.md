@@ -166,3 +166,175 @@ B(079)         .--B(095)---.              B(130)
 Is 98 valid: 0
 alex@/tmp/huffman_rb_trees$
 ```
+
+### [2. Red-Black - Insert](./2-rb_tree_insert.c)
+Write a function that inserts a value in a Red-Black Tree
+* Prototype: `rb_tree_t *rb_tree_insert(rb_tree_t **tree, int value);`
+* Where `tree` is a double pointer to the root node of the Red-Black tree to insert the value in
+* And `value` is the value to store in the node to be inserted
+* Your function must return a pointer to the created node, or `NULL` on failure
+* If the address stored in `tree` is `NULL`, the created node must become the root node.
+* If the value is already present in the tree, it must be ignored
+* The resulting tree after insertion, must be a Red-Black Tree
+* You are allowed to have up to `7` functions in your file
+Your file `0-rb_tree_node.c` will be compiled during the compilation
+```
+alex@/tmp/huffman_rb_trees$ cat 2-main.c
+#include <stdlib.h>
+#include <stdio.h>
+#include "rb_trees.h"
+
+void rb_tree_print(const rb_tree_t *tree);
+
+/**
+ * main - Entry point
+ *
+ * Return: 0 on success
+ */
+int main(void)
+{
+    rb_tree_t *root;
+    rb_tree_t *node;
+
+    root = NULL;
+    node = rb_tree_insert(&root, 98);
+    printf("Inserted: %d\n", node->n);
+    rb_tree_print(root);
+    node = rb_tree_insert(&root, 402);
+    printf("Inserted: %d\n", node->n);
+    rb_tree_print(root);
+    node = rb_tree_insert(&root, 512);
+    printf("Inserted: %d\n", node->n);
+    rb_tree_print(root);
+    node = rb_tree_insert(&root, 12);
+    printf("Inserted: %d\n", node->n);
+    rb_tree_print(root);
+    node = rb_tree_insert(&root, 46);
+    printf("Inserted: %d\n", node->n);
+    rb_tree_print(root);
+    node = rb_tree_insert(&root, 128);
+    printf("Inserted: %d\n", node->n);
+    rb_tree_print(root);
+    node = rb_tree_insert(&root, 256);
+    printf("Inserted: %d\n", node->n);
+    rb_tree_print(root);
+    node = rb_tree_insert(&root, 1);
+    printf("Inserted: %d\n", node->n);
+    rb_tree_print(root);
+    node = rb_tree_insert(&root, 128);
+    printf("Node should be nil -> %p\n", (void *)node);
+    node = rb_tree_insert(&root, 624);
+    printf("Inserted: %d\n", node->n);
+    rb_tree_print(root);
+    node = rb_tree_insert(&root, 780);
+    printf("Inserted: %d\n", node->n);
+    rb_tree_print(root);
+    return (0);
+}
+alex@/tmp/huffman_rb_trees$ gcc -Wall -Wextra -Werror -pedantic 2-main.c 0-rb_tree_node.c 2-rb_tree_insert.c rb_tree_print.c -o rb_tree_insert
+alex@/tmp/huffman_rb_trees$ ./rb_tree_insert
+Inserted: 98
+B(098)
+Inserted: 402
+B(098)---.
+      R(402)
+Inserted: 512
+   .--B(402)---.
+R(098)      R(512)
+Inserted: 12
+         .--B(402)---.
+   .--B(098)      B(512)
+R(012)
+Inserted: 46
+         .--------B(402)---.
+   .--B(046)---.        B(512)
+R(012)      R(098)
+Inserted: 128
+         .--------------B(402)---.
+   .--R(046)---.              B(512)
+B(012)      B(098)---.
+                  R(128)
+Inserted: 256
+         .--------------------B(402)---.
+   .--R(046)---------.              B(512)
+B(012)         .--B(128)---.
+            R(098)      R(256)
+Inserted: 1
+               .--------------------B(402)---.
+         .--R(046)---------.              B(512)
+   .--B(012)         .--B(128)---.
+R(001)            R(098)      R(256)
+Node should be nil -> (nil)
+Inserted: 624
+               .--------------------B(402)---.
+         .--R(046)---------.              B(512)---.
+   .--B(012)         .--B(128)---.              R(624)
+R(001)            R(098)      R(256)
+Inserted: 780
+               .--------------------B(402)---------.
+         .--R(046)---------.                 .--B(624)---.
+   .--B(012)         .--B(128)---.        R(512)      R(780)
+R(001)            R(098)      R(256)
+alex@/tmp/huffman_rb_trees$
+```
+
+### [3. Red-Black - Array to R-B Tree](./3-array_to_rb_tree.c)
+Write a function that builds a Binary Search Tree from an array
+* Prototype: `rb_tree_t *array_to_rb_tree(int *array, size_t size);`
+* Where `array` is a pointer to the first element of the array to be converted
+* And `size` is the number of elements in the array
+* Your function must return a pointer to the root node of the created R-B tree, or `NULL` on failure
+* If a value in the array is already present in the tree, this value must be ignored
+* Your files `2-rb_tree_insert.c` and `0-rb_tree_node.c` will be compiled during the correction
+```
+alex@/tmp/huffman_rb_trees$ cat 3-main.c
+#include <stdlib.h>
+#include "rb_trees.h"
+
+void rb_tree_print(const rb_tree_t *tree);
+
+/**
+ * main - Entry point
+ *
+ * Return: 0 on success, error code on failure
+ */
+int main(void)
+{
+    rb_tree_t *tree;
+    int array[] = {
+        79, 47, 68, 87, 84, 91, 21, 32, 34, 2,
+        20, 22
+    };
+    size_t n = sizeof(array) / sizeof(array[0]);
+
+    tree = array_to_rb_tree(array, n);
+    if (!tree)
+        return (1);
+    rb_tree_print(tree);
+    return (0);
+}
+alex@/tmp/huffman_rb_trees$ gcc -Wall -Wextra -Werror -pedantic 3-main.c 0-rb_tree_node.c 2-rb_tree_insert.c 3-array_to_rb_tree.c rb_tree_print.c -o rb_tree_array
+alex@/tmp/huffman_rb_trees$ ./rb_tree_array
+                           .--------------B(068)---------.
+         .--------------B(032)---------.           .--B(084)---.
+   .--R(020)---.                 .--B(047)      B(079)      B(087)---.
+B(002)      B(021)---.        R(034)                              R(091)
+                  R(022)
+alex@/tmp/huffman_rb_trees$
+```
+
+### [4. Red-Black - Remove](./4-rb_tree_remove.c)
+Write a function that removes a node from a Red-Black tree
+* Prototype: `rb_tree_t *rb_tree_remove(rb_tree_t *root, int n);`
+* Where `root` is a pointer to the root node of the tree
+* And `n` is the value to search and remove from the tree
+* Your function must return the pointer to the new root of the tree after deletion
+* The resulting tree must be a valid Red-Black tree
+* You’re allowed to have up to `7` functions in your file
+* Your file `0-rb_tree_node.c` will be compiled as well during the correction
+
+### [5. Big O #Red-Black Tree](./5-O)
+What are the average time complexities of the below operations for a Red-Black Tree (one answer per line):
+* Inserting a node in a Red-Black Tree of size `n`
+* Removing a node from a Red-Black Tree of size `n`
+* Searching for a node in a Red-Black Tree of size `n`
