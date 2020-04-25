@@ -12,6 +12,8 @@ void rotr(rb_tree_t **tree, rb_tree_t *node)
 {
 	rb_tree_t *child = node->left;
 
+	if (!child)
+		return;
 	node->left = child->right;
 	if (child->right)
 		child->right->parent = node;
