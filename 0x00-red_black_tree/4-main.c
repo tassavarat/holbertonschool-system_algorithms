@@ -20,7 +20,7 @@ int main(void)
 		return (1);
 	puts("Initial tree");
 	rb_tree_print(tree);
-	rb_tree_remove(tree, rm_val);
+	tree = rb_tree_remove(tree, rm_val);
 	printf("After removing %i\n", rm_val);
 	rb_tree_print(tree);
 	return (0);
