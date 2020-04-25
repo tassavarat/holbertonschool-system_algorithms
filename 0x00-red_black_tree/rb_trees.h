@@ -10,34 +10,9 @@
 			node = n < node->n ? node->left : node->right;	\
 	} while (0)
 
-#define MIN_TRANSPLANT()						\
-	do {								\
-		min = rm_node->right;					\
-		GET_MIN(min);						\
-		rm_node_cpy = min;					\
-		rm_node_cpy_color = rm_node_cpy->color;			\
-		node = rm_node_cpy->right;				\
-		if (node && rm_node_cpy->parent == rm_node)		\
-		{							\
-			node_parent = node->parent = rm_node_cpy;	\
-		}							\
-		else							\
-		{							\
-			node_parent = rm_node_cpy->parent;		\
-			root = rb_transplant(root, rm_node_cpy,		\
-					rm_node_cpy->right);		\
-			rm_node_cpy->right = rm_node->right;		\
-			rm_node_cpy->parent = rm_node_cpy;		\
-		}							\
-		root = rb_transplant(root, rm_node, rm_node_cpy);	\
-		rm_node_cpy->left = rm_node->left;			\
-		rm_node_cpy->left->parent = rm_node_cpy;		\
-		rm_node_cpy->color = rm_node->color;			\
-	} while (0)
-
 #define GET_MIN(node)				\
 	do {					\
-		while (node->left)			\
+		while (node->left)		\
 			node = node->left;	\
 	} while (0)
 
