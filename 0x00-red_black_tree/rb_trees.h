@@ -17,7 +17,7 @@
 		rm_node_cpy = min;					\
 		rm_node_cpy_color = rm_node_cpy->color;			\
 		node = rm_node_cpy->right;				\
-		if (rm_node_cpy->parent == rm_node)			\
+		if (node && rm_node_cpy->parent == rm_node)		\
 		{							\
 			node_parent = node->parent = rm_node_cpy;	\
 		}							\

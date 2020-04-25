@@ -45,7 +45,8 @@ rb_tree_t *repair_lsibling(rb_tree_t **root, rb_tree_t *node,
 				sibling->left->color = BLACK;
 		}
 		node_parent->color = BLACK;
-		sibling->left->color = BLACK;
+		if (sibling->left)
+			sibling->left->color = BLACK;
 		rotl(root, node_parent);
 		node = *root;
 	}
@@ -97,6 +98,8 @@ rb_tree_t *repair_rsibling(rb_tree_t **root, rb_tree_t *node,
 				sibling->right->color = BLACK;
 		}
 		node_parent->color = BLACK;
+		if (sibling->right)
+			sibling->right->color = BLACK;
 		rotl(root, node_parent);
 		node = *root;
 	}
@@ -118,7 +121,8 @@ void rb_rm_repair(rb_tree_t **root, rb_tree_t *node, rb_tree_t *node_parent)
 		else
 			node = repair_lsibling(root, node, node_parent);
 	}
-	node->color = BLACK;
+	if (node)
+		node->color = BLACK;
 }
 
 /**

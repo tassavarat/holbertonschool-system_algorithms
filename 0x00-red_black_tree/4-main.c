@@ -13,7 +13,7 @@ int main(void)
 		20, 22
 	};
 	size_t n = sizeof(array) / sizeof(array[0]);
-	int rm_val = 84;
+	int rm_val = 68;
 
 	tree = array_to_rb_tree(array, n);
 	if (!tree)
