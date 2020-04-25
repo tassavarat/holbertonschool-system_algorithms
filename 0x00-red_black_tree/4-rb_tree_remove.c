@@ -179,7 +179,8 @@ void min_transplant(rb_tree_t **root, rb_tree_t *rm_node,
 		*root = rb_transplant(*root, rm_node_cpy,
 				rm_node_cpy->right);
 		rm_node_cpy->right = rm_node->right;
-		rm_node_cpy->right->parent = rm_node_cpy;
+		if (rm_node_cpy->right)
+			rm_node_cpy->right->parent = rm_node_cpy;
 	}
 	*root = rb_transplant(*root, rm_node, rm_node_cpy);
 	rm_node_cpy->left = rm_node->left;
