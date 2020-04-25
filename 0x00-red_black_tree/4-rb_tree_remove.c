@@ -126,25 +126,65 @@ void rb_rm_repair(rb_tree_t **root, rb_tree_t *node, rb_tree_t *node_parent)
 }
 
 /**
- * rb_transplant - transplants child node with rm_node
+ * rb_transplant - transplants src node with tar
  * @root: pointer to root node
- * @rm_node: node to transplant
- * @child: node being transplanted
+ * @tar: node to transplant
+ * @src: node being transplanted
  *
- * If rm_node is the root node then points root to child
+ * If tar is the root node then points root to src
  * Return: pointer to root node
  */
-rb_tree_t *rb_transplant(rb_tree_t *root, rb_tree_t *rm_node, rb_tree_t *child)
+rb_tree_t *rb_transplant(rb_tree_t *root, rb_tree_t *tar, rb_tree_t *src)
 {
-	if (!rm_node->parent)
-		root = child;
-	else if (rm_node == rm_node->parent->left)
-		rm_node->parent->left = child;
+	if (!tar->parent)
+		root = src;
+	else if (tar == tar->parent->left)
+		tar->parent->left = src;
 	else
-		rm_node->parent->right = child;
-	if (child)
-		child->parent = rm_node->parent;
+		tar->parent->right = src;
+	if (src)
+		src->parent = tar->parent;
 	return (root);
+}
+
+/**
+ * min_transplant - gets the minimum value node and calls transplant
+ * @root: double pointer to root node
+ * @rm_node: pointer to node being removed
+ * @rm_node_cpy: pointer to copy of node being removed
+ * @rm_node_cpy_color: stores color value of rm_node_cpy
+ * @node: pointer to node where violation detected
+ * @node_parent: double pointer to node's parent
+ *
+ * Continuation of rb_tree_remove else logic
+ */
+void min_transplant(rb_tree_t **root, rb_tree_t *rm_node,
+		rb_tree_t *rm_node_cpy, int *rm_node_cpy_color,
+		rb_tree_t *node, rb_tree_t **node_parent)
+{
+	rb_tree_t *min;
+
+	min = rm_node->right;
+	GET_MIN(min);
+	rm_node_cpy = min;
+	*rm_node_cpy_color = rm_node_cpy->color;
+	node = rm_node_cpy->right;
+	if (node && rm_node_cpy->parent == rm_node)
+	{
+		*node_parent = node->parent = rm_node_cpy;
+	}
+	else
+	{
+		*node_parent = rm_node_cpy->parent;
+		*root = rb_transplant(*root, rm_node_cpy,
+				rm_node_cpy->right);
+		rm_node_cpy->right = rm_node->right;
+		rm_node_cpy->right->parent = rm_node_cpy;
+	}
+	*root = rb_transplant(*root, rm_node, rm_node_cpy);
+	rm_node_cpy->left = rm_node->left;
+	rm_node_cpy->left->parent = rm_node_cpy;
+	rm_node_cpy->color = rm_node->color;
 }
 
 /**
@@ -160,10 +200,11 @@ rb_tree_t *rb_transplant(rb_tree_t *root, rb_tree_t *rm_node, rb_tree_t *child)
  */
 rb_tree_t *rb_tree_remove(rb_tree_t *root, int n)
 {
-	rb_tree_t *rm_node, *rm_node_cpy, *node, *node_parent, *min;
+	rb_tree_t *rm_node, *rm_node_cpy, *node, *node_parent;
 	int rm_node_cpy_color;
 
 	rm_node = root;
+	node = NULL;
 	GET_NODE(rm_node, n);
 	rm_node_cpy = rm_node;
 	if (!rm_node)
@@ -185,7 +226,8 @@ rb_tree_t *rb_tree_remove(rb_tree_t *root, int n)
 	}
 	else
 	{
-		MIN_TRANSPLANT();
+		min_transplant(&root, rm_node, rm_node_cpy, &rm_node_cpy_color,
+				node, &node_parent);
 	}
 	free(rm_node);
 	if (rm_node_cpy_color == BLACK)
