@@ -4,6 +4,44 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define GET_NODE(node, n)						\
+	do {								\
+		while (node && node->n != n)				\
+			node = n < node->n ? node->left : node->right;	\
+	} while (0)
+
+#define MIN_TRANSPLANT()						\
+	do {								\
+		min = rm_node->right;					\
+		GET_MIN(min);						\
+		rm_node_cpy = min;					\
+		rm_node_cpy_color = rm_node_cpy->color;			\
+		node = rm_node_cpy->right;				\
+		if (!node)						\
+			node_parent = rm_node_cpy->parent;		\
+		if (rm_node_cpy->parent == rm_node)			\
+		{							\
+			node_parent = node->parent = rm_node_cpy;	\
+		}							\
+		else							\
+		{							\
+			root = rb_transplant(root, rm_node_cpy,		\
+					rm_node_cpy->right);		\
+			rm_node_cpy->right = rm_node->right;		\
+			rm_node_cpy->parent = rm_node_cpy;		\
+		}							\
+		root = rb_transplant(root, rm_node, rm_node_cpy);	\
+		rm_node_cpy->left = rm_node->left;			\
+		rm_node_cpy->parent = rm_node_cpy;			\
+		rm_node_cpy->color = rm_node->color;			\
+	} while (0)
+
+#define GET_MIN(node)				\
+	do {					\
+		while (node)			\
+			node = node->left;	\
+	} while (0)
+
 /**
  * enum rb_color_e - Possible color of a Red-Black tree
  *
@@ -42,5 +80,7 @@ int rb_tree_is_valid(const rb_tree_t *tree);
 rb_tree_t *rb_tree_insert(rb_tree_t **tree, int value);
 rb_tree_t *array_to_rb_tree(int *array, size_t size);
 rb_tree_t *rb_tree_remove(rb_tree_t *root, int n);
+void rotl(rb_tree_t **tree, rb_tree_t *node);
+void rotr(rb_tree_t **tree, rb_tree_t *node);
 
 #endif /* RB_TREES_H */
