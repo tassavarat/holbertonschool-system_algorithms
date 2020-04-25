@@ -17,14 +17,13 @@
 		rm_node_cpy = min;					\
 		rm_node_cpy_color = rm_node_cpy->color;			\
 		node = rm_node_cpy->right;				\
-		if (!node)						\
-			node_parent = rm_node_cpy->parent;		\
 		if (rm_node_cpy->parent == rm_node)			\
 		{							\
 			node_parent = node->parent = rm_node_cpy;	\
 		}							\
 		else							\
 		{							\
+			node_parent = rm_node_cpy->parent;		\
 			root = rb_transplant(root, rm_node_cpy,		\
 					rm_node_cpy->right);		\
 			rm_node_cpy->right = rm_node->right;		\
@@ -32,13 +31,13 @@
 		}							\
 		root = rb_transplant(root, rm_node, rm_node_cpy);	\
 		rm_node_cpy->left = rm_node->left;			\
-		rm_node_cpy->parent = rm_node_cpy;			\
+		rm_node_cpy->left->parent = rm_node_cpy;		\
 		rm_node_cpy->color = rm_node->color;			\
 	} while (0)
 
 #define GET_MIN(node)				\
 	do {					\
-		while (node)			\
+		while (node->left)			\
 			node = node->left;	\
 	} while (0)
 
