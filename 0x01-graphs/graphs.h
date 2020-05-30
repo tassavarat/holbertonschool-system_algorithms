@@ -32,12 +32,13 @@ typedef struct edge_s
 	struct edge_s   *next;
 } edge_t;
 
+
 /**
  * struct vertex_s - Node in the linked list of vertices in the adjency list
  *
  * @index: Index of the vertex in the adjency list.
  * @content: Custom data stored in the vertex (here, a string)
- * @nb_edges: Number of connections with other vertices in the graph
+ * @nb_edges: Number of conenctions with other vertices in the graph
  * @edges: Pointer to the head node of the linked list of edges
  * @next: Pointer to the next vertex in the adgency linked list
  *   This pointer points to another vertex in the graph, but it
