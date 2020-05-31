@@ -45,20 +45,20 @@ int main(void)
 		return (EXIT_FAILURE);
 	}
 
-	/* if (!graph_add_edge(graph, "San Francisco", "Las Vegas", BIDIRECTIONAL) || */
-	/* 		!graph_add_edge(graph, "Boston", "New York", UNIDIRECTIONAL) || */
-	/* 		!graph_add_edge(graph, "Miami", "San Francisco", BIDIRECTIONAL) || */
-	/* 		!graph_add_edge(graph, "Houston", "Seattle", UNIDIRECTIONAL) || */
-	/* 		!graph_add_edge(graph, "Chicago", "New York", BIDIRECTIONAL) || */
-	/* 		!graph_add_edge(graph, "Las Vegas", "New York", UNIDIRECTIONAL) || */
-	/* 		!graph_add_edge(graph, "Seattle", "Chicago", UNIDIRECTIONAL) || */
-	/* 		!graph_add_edge(graph, "New York", "Houston", BIDIRECTIONAL) || */
-	/* 		!graph_add_edge(graph, "Seattle", "Miami", BIDIRECTIONAL) || */
-	/* 		!graph_add_edge(graph, "San Francisco", "Boston", BIDIRECTIONAL)) */
-	/* { */
-	/* 	fprintf(stderr, "Failed to add edge\n"); */
-	/* 	return (EXIT_FAILURE); */
-	/* } */
+	if (!graph_add_edge(graph, "San Francisco", "Las Vegas", BIDIRECTIONAL) ||
+			!graph_add_edge(graph, "Boston", "New York", UNIDIRECTIONAL) ||
+			!graph_add_edge(graph, "Miami", "San Francisco", BIDIRECTIONAL) ||
+			!graph_add_edge(graph, "Houston", "Seattle", UNIDIRECTIONAL) ||
+			!graph_add_edge(graph, "Chicago", "New York", BIDIRECTIONAL) ||
+			!graph_add_edge(graph, "Las Vegas", "New York", UNIDIRECTIONAL) ||
+			!graph_add_edge(graph, "Seattle", "Chicago", UNIDIRECTIONAL) ||
+			!graph_add_edge(graph, "New York", "Houston", BIDIRECTIONAL) ||
+			!graph_add_edge(graph, "Seattle", "Miami", BIDIRECTIONAL) ||
+			!graph_add_edge(graph, "San Francisco", "Boston", BIDIRECTIONAL))
+	{
+		fprintf(stderr, "Failed to add edge\n");
+		return (EXIT_FAILURE);
+	}
 
 	graph_display(graph);
 
