@@ -22,7 +22,8 @@ size_t dfs(vertex_t *v, int *visited,
 	action(v, depth);
 	if (depth > *max_depth)
 		*max_depth = depth;
-	dfs(v->edges->dest, visited, action, ++depth, max_depth);
+	if (v->edges)
+		dfs(v->edges->dest, visited, action, ++depth, max_depth);
 	for (e = v->edges; e; e = e->next)
 		dfs(e->dest, visited, action, depth, max_depth);
 	return (*max_depth);
