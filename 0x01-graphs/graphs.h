@@ -1,6 +1,7 @@
 #ifndef GRAPHS_H
 #define GRAPHS_H
 
+#include <stdio.h>	/* for debugging */
 #include <stdlib.h>
 #include <string.h>
 
