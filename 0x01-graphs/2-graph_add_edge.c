@@ -77,7 +77,5 @@ int graph_add_edge(graph_t *graph, const char *src, const char *dest,
 	src_v = dest_v = NULL;
 	if (!find_vert(graph, src, dest, &src_v, &dest_v))
 		return (0);
-	if (!link_vert(src_v, dest_v, type))
-		return (0);
-	return (1);
+	return (link_vert(src_v, dest_v, type));
 }
