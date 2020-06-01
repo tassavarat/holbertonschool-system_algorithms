@@ -1,9 +1,19 @@
 #ifndef GRAPHS_H
 #define GRAPHS_H
 
-#include <stdio.h>	/* for debugging */
 #include <stdlib.h>
 #include <string.h>
+
+/**
+ * struct queue_s - queue linked list
+ * @node: pointer to edge node
+ * @next: pointer to next queue node
+ */
+typedef struct queue_s
+{
+	struct vertex_s *node;
+	struct queue_s *next;
+} queue_t;
 
 /**
  * enum edge_type_e - Enumerates the different types of
