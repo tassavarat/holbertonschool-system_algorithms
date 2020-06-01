@@ -3,17 +3,22 @@
 /**
  * pop - free the head node of a queue
  * @head: double pointer to head node
+ *
+ * Return: pointer to vertex pointed to by queue node being freed
  */
-void pop(queue_t **head)
+vertex_t *pop(queue_t **head)
 {
 	queue_t *tmp;
+	vertex_t *v;
 
 	if (*head)
 	{
 		tmp = *head;
 		*head = (*head)->next;
+		v = tmp->node;
 		free(tmp);
 	}
+	return (v);
 }
 
 /**
@@ -76,8 +81,7 @@ size_t bfs(vertex_t *v, int *visited,
 			for (e = qhead->node->edges; e && visited[e->dest->index];
 					e = e->next)
 				;
-			action(qhead->node, visited[qhead->node->index]);
-			pop(&qhead);
+			action(pop(&qhead), visited[qhead->node->index]);
 		}
 	} while (qhead);
 	return (--depth);
