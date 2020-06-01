@@ -1,0 +1,107 @@
+#include "graphs.h"
+
+/**
+ * pop - free the head node of a queue
+ * @head: double pointer to head node
+ */
+void pop(queue_t **head)
+{
+	queue_t *tmp;
+
+	if (*head)
+	{
+		tmp = *head;
+		*head = (*head)->next;
+		free(tmp);
+	}
+}
+
+/**
+ * push - push new node into a queue
+ * @head: double pointer to head node of queue
+ * @tail: pointer to tail node of queue
+ * @v: pointer to node queue will point to
+ *
+ * Return: newly created node, NULL on failure
+ */
+queue_t *push(queue_t **head, queue_t *tail, vertex_t *v)
+{
+	queue_t *new = malloc(sizeof(*new));
+
+	if (!new)
+		return (NULL);
+	new->node = v;
+	new->next = NULL;
+	if (!*head)
+		*head = new;
+	else
+		tail->next = new;
+	return (new);
+}
+
+/**
+ * bfs - traverse graph using breath-first algorithm
+ * @v: pointer vertex node being visited
+ * @visited: array specifying if vertex has been visited
+ * @action: function pointer to be called for each visited vertex
+ *
+ * Return: maximum depth reached, 0 on failure
+ */
+size_t bfs(vertex_t *v, int *visited,
+		void (*action)(const vertex_t *v, size_t depth))
+{
+	size_t depth;
+	queue_t *qhead, *qtail;
+	edge_t *e;
+
+	visited[v->index] = 1;
+	action(v, 0);
+	qhead = NULL;
+	depth = 1;
+	e = v->edges;
+	do {
+		if (e)
+		{
+			qtail = push(&qhead, qtail, e->dest);
+			if (!qtail)
+				return (0);
+			visited[qtail->node->index] = depth;
+			e = e->next;
+		}
+		else
+		{
+			depth = visited[qhead->node->index] + 1;
+			for (e = qhead->node->edges; e && visited[e->dest->index];
+					e = e->next)
+				;
+			action(qhead->node, visited[qhead->node->index]);
+			pop(&qhead);
+		}
+	} while (qhead);
+	return (--depth);
+}
+
+/**
+ * goes through graph using breadth-first algorithm
+ * @graph: pointer to graph to traverse
+ * @action: function pointer to be called for each visited vertex
+ *	    v: pointer to visited vertex
+ *	    depth: depth of v
+ *
+ * Return: greatest vertex depth, 0 on failure
+ */
+size_t breadth_first_traverse(const graph_t *graph,
+		void (*action)(const vertex_t *v, size_t depth))
+{
+	int *visited;
+	size_t depth;
+
+	if (!graph)
+		return (0);
+	visited = calloc(graph->nb_vertices, sizeof(*visited));
+	if (!visited)
+		return (0);
+	depth = bfs(graph->vertices, visited, action);
+	free(visited);
+	return (depth);
+}
