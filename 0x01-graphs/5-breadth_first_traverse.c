@@ -98,7 +98,7 @@ size_t breadth_first_traverse(const graph_t *graph,
 	int *visited;
 	size_t depth;
 
-	if (!graph)
+	if (!graph || !action || !graph->nb_vertices)
 		return (0);
 	visited = calloc(graph->nb_vertices, sizeof(*visited));
 	if (!visited)
