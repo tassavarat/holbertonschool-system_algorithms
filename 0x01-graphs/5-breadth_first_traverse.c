@@ -59,6 +59,8 @@ size_t bfs(vertex_t *v, int *visited,
 	qhead = NULL;
 	depth = 1;
 	e = v->edges;
+	if (!e)
+		return (0);
 	do {
 		if (e)
 		{
