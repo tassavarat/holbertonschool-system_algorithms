@@ -40,7 +40,7 @@ size_t depth_first_traverse(const graph_t *graph,
 	int *visited;
 	size_t max_depth;
 
-	if (!graph)
+	if (!graph || !action || !graph->nb_vertices)
 		return (0);
 	visited = calloc(graph->nb_vertices, sizeof(*visited));
 	if (!visited)
