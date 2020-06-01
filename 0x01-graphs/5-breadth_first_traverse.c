@@ -17,6 +17,16 @@ void pop(queue_t **head)
 }
 
 /**
+ * clear_queue - clear a queue
+ * @head: double pointer to head of queue
+ */
+void clear_queue(queue_t **head)
+{
+	while (*head)
+		pop(head);
+}
+
+/**
  * push - push new node into a queue
  * @head: double pointer to head node of queue
  * @tail: pointer to tail node of queue
@@ -66,7 +76,10 @@ size_t bfs(vertex_t *v, int *visited,
 		{
 			qtail = push(&qhead, qtail, e->dest);
 			if (!qtail)
+			{
+				clear_queue(&qhead);
 				return (0);
+			}
 			visited[qtail->node->index] = depth;
 			e = e->next;
 		}
