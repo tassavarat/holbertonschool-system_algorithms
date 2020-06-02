@@ -69,10 +69,13 @@ size_t bfs(vertex_t *v, int *visited,
 	do {
 		if (e)
 		{
-			qtail = push(&qhead, qtail, e->dest);
-			if (!qtail)
-				return (0);
-			visited[qtail->node->index] = depth;
+			if (!visited[e->dest->index])
+			{
+				qtail = push(&qhead, qtail, e->dest);
+				if (!qtail)
+					return (0);
+				visited[qtail->node->index] = depth;
+			}
 			e = e->next;
 		}
 		else
