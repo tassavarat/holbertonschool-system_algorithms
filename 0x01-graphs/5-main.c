@@ -48,6 +48,7 @@ int main(void)
 	if (!graph_add_edge(graph, "San Francisco", "Las Vegas", BIDIRECTIONAL) ||
 			!graph_add_edge(graph, "Boston", "New York", UNIDIRECTIONAL) ||
 			!graph_add_edge(graph, "Miami", "San Francisco", BIDIRECTIONAL) ||
+			!graph_add_edge(graph, "Miami", "San Francisco", BIDIRECTIONAL) ||
 			!graph_add_edge(graph, "Houston", "Seattle", UNIDIRECTIONAL) ||
 			!graph_add_edge(graph, "Chicago", "New York", BIDIRECTIONAL) ||
 			!graph_add_edge(graph, "Las Vegas", "New York", UNIDIRECTIONAL) ||
