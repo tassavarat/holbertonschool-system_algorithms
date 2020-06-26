@@ -6,12 +6,15 @@
  * @node: pointer to inserted node
  *
  * Return: pointer to node containing data value of inserted node
+ * or NULL on error
  */
 binary_tree_node_t *min_heapify(int (*data_cmp)(void *, void *),
 		binary_tree_node_t *node)
 {
 	void *tmp;
 
+	if (!data_cmp || !node)
+		return  (NULL);
 	while (node->parent && data_cmp(node->data, node->parent->data) < 0)
 	{
 		tmp = node->parent->data;
@@ -27,12 +30,15 @@ binary_tree_node_t *min_heapify(int (*data_cmp)(void *, void *),
  * @node: pointer to root node
  * @n: one-indexed n-th node to find
  *
- * Return: pointer to specified node or last node in tree if n greater than
- * number of nodes in tree
+ * Return: pointer to specified node, last node in tree if n greater than
+ * number of nodes in tree, or NULL on error
  */
 binary_tree_node_t *n_node(binary_tree_node_t *node, int n)
 {
 	int bit_idx, mask;
+
+	if (!node || n < 0)
+		return (NULL);
 
 	for (bit_idx = 0; 1 << (bit_idx + 1) <  n; ++bit_idx)
 		;
@@ -85,7 +91,5 @@ binary_tree_node_t *heap_insert(heap_t *heap, void *data)
 		else
 			node = node->right = binary_tree_node(node, data);
 	}
-	if (!node)
-		return (NULL);
 	return (min_heapify(heap->data_cmp, node));
 }
