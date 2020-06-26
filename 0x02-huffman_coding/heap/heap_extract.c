@@ -18,10 +18,10 @@ binary_tree_node_t *restore_heapify(int (*data_cmp)(void *, void *),
 	do {
 		least = NULL;
 		if (node->left && data_cmp(node->data, node->left->data) > 0 &&
-				(!least || *(int *) node->left->data < *(int *) least->data))
+				(!least || data_cmp(least->data, node->left->data) > 0))
 			least = node->left;
 		if (node->right && data_cmp(node->data, node->right->data) > 0 &&
-				(!least || *(int *) node->right->data < *(int *) least->data))
+				(!least || data_cmp(least->data, node->right->data) > 0))
 			least = node->right;
 		if (least)
 			node = swap_nodes(node, least);
@@ -43,11 +43,19 @@ void *extract_root(heap_t *heap)
 	void *data;
 
 	node = n_node(heap->root, heap->size);
-	data = swap_nodes(heap->root, node)->data;
-	if (node->parent->left == node)
-		node->parent->left = NULL;
+	if (node->parent)
+	{
+		data = swap_nodes(heap->root, node)->data;
+		if (node->parent->left == node)
+			node->parent->left = NULL;
+		else
+			node->parent->right = NULL;
+	}
 	else
-		node->parent->right = NULL;
+	{
+		data = heap->root->data;
+		heap->root = NULL;
+	}
 	free(node);
 	--heap->size;
 	return (data);
@@ -66,7 +74,6 @@ void *heap_extract(heap_t *heap)
 	if (!heap)
 		return (NULL);
 	data = extract_root(heap);
-	if (!restore_heapify(heap->data_cmp, heap->root))
-		return (NULL);
+	restore_heapify(heap->data_cmp, heap->root);
 	return (data);
 }

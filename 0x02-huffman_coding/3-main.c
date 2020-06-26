@@ -50,6 +50,12 @@ int main(void)
 	int array[] = {
 		34, 2, 45, 23, 76
 	};
+	/* int array[] = { */
+	/* 	34 */
+	/* }; */
+	/* int array[] = { */
+	/* 	1, 2, 3, 4 */
+	/* }; */
 	size_t size = sizeof(array) / sizeof(array[0]);
 	size_t i;
 	binary_tree_node_t *node;
