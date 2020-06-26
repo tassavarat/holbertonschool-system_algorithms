@@ -1,6 +1,25 @@
 #include "heap.h"
 
 /**
+ * swap_nodes - swap data of two specified nodes
+ * @a: pointer to first node
+ * @b: pointer to second node
+ *
+ * Return: pointer to node containing data of a
+ */
+binary_tree_node_t *swap_nodes(binary_tree_node_t *a, binary_tree_node_t *b)
+{
+	void *tmp;
+
+	tmp = b->data;
+	b->data = a->data;
+	a->data = tmp;
+	a = b;
+
+	return (a);
+}
+
+/**
  * heapify - heapifies a tree
  * @data_cmp: pointer to function determining whether to min or max heapify
  * @node: pointer to inserted node
@@ -11,17 +30,10 @@
 binary_tree_node_t *heapify(int (*data_cmp)(void *, void *),
 		binary_tree_node_t *node)
 {
-	void *tmp;
-
 	if (!data_cmp || !node)
-		return  (NULL);
+		return (NULL);
 	while (node->parent && data_cmp(node->data, node->parent->data) < 0)
-	{
-		tmp = node->parent->data;
-		node->parent->data = node->data;
-		node->data = tmp;
-		node = node->parent;
-	}
+		node = swap_nodes(node, node->parent);
 	return (node);
 }
 
