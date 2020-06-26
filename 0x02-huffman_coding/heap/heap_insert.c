@@ -52,7 +52,7 @@ binary_tree_node_t *n_node(binary_tree_node_t *node, int n)
 	if (!node || n < 0)
 		return (NULL);
 
-	for (bit_idx = 0; 1 << (bit_idx + 1) <  n; ++bit_idx)
+	for (bit_idx = 0; 1 << (bit_idx + 1) <=  n; ++bit_idx)
 		;
 	for (--bit_idx; bit_idx >= 0; --bit_idx)
 	{
