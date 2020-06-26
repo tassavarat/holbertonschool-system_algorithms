@@ -1,14 +1,14 @@
 #include "heap.h"
 
 /**
- * min_heapify - min heapifies a tree
- * @data_cmp: pointer to function comparing data of two nodes
+ * heapify - heapifies a tree
+ * @data_cmp: pointer to function determining whether to min or max heapify
  * @node: pointer to inserted node
  *
  * Return: pointer to node containing data value of inserted node
  * or NULL on error
  */
-binary_tree_node_t *min_heapify(int (*data_cmp)(void *, void *),
+binary_tree_node_t *heapify(int (*data_cmp)(void *, void *),
 		binary_tree_node_t *node)
 {
 	void *tmp;
@@ -64,7 +64,7 @@ binary_tree_node_t *n_node(binary_tree_node_t *node, int n)
 }
 
 /**
- * heap_insert - insert node into a min binary heap
+ * heap_insert - insert node into a binary heap
  * @heap: pointer to heap to insert node into
  * @data: pointer to data to store in node
  *
@@ -91,5 +91,5 @@ binary_tree_node_t *heap_insert(heap_t *heap, void *data)
 		else
 			node = node->right = binary_tree_node(node, data);
 	}
-	return (min_heapify(heap->data_cmp, node));
+	return (heapify(heap->data_cmp, node));
 }
