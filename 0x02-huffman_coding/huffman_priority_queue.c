@@ -1,6 +1,5 @@
 #include "huffman.h"
 #include "heap/heap.h"
-#include <stdio.h>
 
 /**
  * compar - compare two frequencies
