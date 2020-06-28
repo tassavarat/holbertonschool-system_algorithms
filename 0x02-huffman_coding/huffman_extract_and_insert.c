@@ -12,7 +12,7 @@ int huffman_extract_and_insert(heap_t *priority_queue)
 	size_t sum;
 	symbol_t *symbol;
 
-	if (!priority_queue)
+	if (!priority_queue || priority_queue->size < 2)
 		return (0);
 	sum = ((symbol_t *)((binary_tree_node_t *)
 				heap_extract(priority_queue))->data)->freq;

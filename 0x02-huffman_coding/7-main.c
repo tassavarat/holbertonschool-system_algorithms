@@ -57,11 +57,13 @@ int main(void)
 
 	ret = huffman_extract_and_insert(priority_queue);
 	binary_tree_print(priority_queue->root, nested_print);
+	printf("priority_queue->size: %lu\n", priority_queue->size);
 	printf("ret: %i\n", ret);
 	printf("\n");
 
 	ret = huffman_extract_and_insert(priority_queue);
 	binary_tree_print(priority_queue->root, nested_print);
+	printf("priority_queue->size: %lu\n", priority_queue->size);
 	printf("ret: %i\n", ret);
 
 	return (EXIT_SUCCESS);
