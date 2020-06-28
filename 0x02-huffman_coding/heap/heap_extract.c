@@ -17,10 +17,10 @@ binary_tree_node_t *restore_heapify(int (*data_cmp)(void *, void *),
 		return (NULL);
 	do {
 		least = NULL;
-		if (node->left && data_cmp(node->data, node->left->data) > 0 &&
+		if (node->left && data_cmp(node->data, node->left->data) >= 0 &&
 				(!least || data_cmp(least->data, node->left->data) > 0))
 			least = node->left;
-		if (node->right && data_cmp(node->data, node->right->data) > 0 &&
+		if (node->right && data_cmp(node->data, node->right->data) >= 0 &&
 				(!least || data_cmp(least->data, node->right->data) > 0))
 			least = node->right;
 		if (least)
