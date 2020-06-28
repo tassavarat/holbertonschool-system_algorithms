@@ -32,7 +32,7 @@ binary_tree_node_t *heapify(int (*data_cmp)(void *, void *),
 {
 	if (!data_cmp || !node)
 		return (NULL);
-	while (node->parent && data_cmp(node->data, node->parent->data) < 0)
+	while (node->parent && data_cmp(node->data, node->parent->data) <= 0)
 		node = swap_nodes(node, node->parent);
 	return (node);
 }
