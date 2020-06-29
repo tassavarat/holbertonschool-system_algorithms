@@ -50,7 +50,6 @@ int main(void)
 	/* 	2, 2, 6, 4, 9, 10, 11 */
 	/* }; */
 	size_t size = sizeof(data) / sizeof(data[0]);
-	int ret;
 
 	priority_queue = huffman_priority_queue(data, freq, size);
 	if (!priority_queue)
@@ -61,16 +60,12 @@ int main(void)
 	binary_tree_print(priority_queue->root, nested_print);
 	printf("\n");
 
-	ret = huffman_extract_and_insert(priority_queue);
+	huffman_extract_and_insert(priority_queue);
 	binary_tree_print(priority_queue->root, nested_print);
-	printf("priority_queue->size: %lu\n", priority_queue->size);
-	printf("ret: %i\n", ret);
 	printf("\n");
 
-	ret = huffman_extract_and_insert(priority_queue);
+	huffman_extract_and_insert(priority_queue);
 	binary_tree_print(priority_queue->root, nested_print);
-	printf("priority_queue->size: %lu\n", priority_queue->size);
-	printf("ret: %i\n", ret);
 
 	return (EXIT_SUCCESS);
 }
