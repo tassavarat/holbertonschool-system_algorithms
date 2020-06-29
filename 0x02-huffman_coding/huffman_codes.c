@@ -21,7 +21,7 @@ void print_codes(char data, char *codes, size_t size)
 {
 	size_t i;
 
-	printf("%c:", data);
+	printf("%c: ", data);
 	for (i = 0; i < size; ++i)
 		printf("%c", codes[i]);
 	putchar('\n');
