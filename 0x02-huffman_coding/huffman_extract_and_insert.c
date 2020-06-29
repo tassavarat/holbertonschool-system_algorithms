@@ -1,5 +1,4 @@
 #include "huffman.h"
-#include <stdio.h>
 
 /**
  * huffman_extract_and_insert - combine the frequencies of two nodes together
