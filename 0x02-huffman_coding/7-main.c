@@ -40,9 +40,15 @@ int main(void)
 	char data[] = {
 		'a', 'b', 'c', 'd', 'e', 'f'
 	};
+	/* char data[] = { */
+	/* 	'a', 'b', 'c', 'd', 'e', 'f', 'g' */
+	/* }; */
 	size_t freq[] = {
 		6, 11, 12, 13, 16, 36
 	};
+	/* size_t freq[] = { */
+	/* 	2, 2, 6, 4, 9, 10, 11 */
+	/* }; */
 	size_t size = sizeof(data) / sizeof(data[0]);
 	int ret;
 

@@ -1,30 +1,5 @@
 #include "heap.h"
 
-void sift_down(heap_t *heap)
-{
-	binary_tree_node_t *largest, *node;
-
-	if (!heap || !heap->root || heap->size < 2)
-		return;
-	node = heap->root;
-	while (node->left)
-	{
-		largest = node->left;
-		if (node->right && heap->data_cmp(node->data, node->right->data) >= 0
-		    && heap->data_cmp(node->right->data, node->left->data) < 0)
-		{
-			swap_nodes(node->right, node);
-			largest = node->right;
-		}
-		else if (heap->data_cmp(node->left->data, node->data) <= 0)
-		{
-			swap_nodes(node->left, node);
-		}
-		node = largest;
-	}
-}
-
-
 /**
  * restore_heapify - restore heap property for binary tree
  * @data_cmp: pointer to function determining whether to min or max heapify
@@ -42,10 +17,10 @@ binary_tree_node_t *restore_heapify(int (*data_cmp)(void *, void *),
 		return (NULL);
 	do {
 		least = NULL;
-		if (node->left && data_cmp(node->data, node->left->data) > 0 &&
+		if (node->left && data_cmp(node->data, node->left->data) >= 0 &&
 				(!least || data_cmp(least->data, node->left->data) > 0))
 			least = node->left;
-		if (node->right && data_cmp(node->data, node->right->data) > 0 &&
+		if (node->right && data_cmp(node->data, node->right->data) >= 0 &&
 				(!least || data_cmp(least->data, node->right->data) > 0))
 			least = node->right;
 		if (least)
@@ -82,7 +57,8 @@ void *extract_root(heap_t *heap)
 		heap->root = NULL;
 	}
 	free(node);
-	--heap->size;
+	if (--heap->size == 0)
+		heap->root = NULL;
 	return (data);
 }
 
@@ -99,8 +75,6 @@ void *heap_extract(heap_t *heap)
 	if (!heap)
 		return (NULL);
 	data = extract_root(heap);
-	if (heap->size > 1)
-		restore_heapify(heap->data_cmp, heap->root);
-	/* sift_down(heap); */
+	restore_heapify(heap->data_cmp, heap->root);
 	return (data);
 }
