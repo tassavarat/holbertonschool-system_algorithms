@@ -850,16 +850,15 @@ Write a program that compress or decompress a file using Huffman codes
 Name of the executable: `huffman`
 
 Usage: `./huffman <mode> <filename> <out_filename>`, where:
-
-    `<mode>` is either
-        `c:` Compression mode
-            `<filename>` will be compressed into `<out_filename>`
-        `d:` Decompression mode
-            `<filename>` will be decompressed into `<out_filename>`
-    If `<filename>` does not exist:
-        Your program must print `No such file: <filename>`, where `<filename>` must be replaced by the actual filename
-        Your program must return `EXIT_FAILURE`
-    `<out_filename>` must be created. If it already exists:
-        Your program must print `File already exists: <filename>`, where `<filename>` must be replaced by the actual filename
-        Your program must return `EXIT_FAILURE`
-    If the number of arguments is not correct, your program must print `Usage: huffman <mode>` `<filename> <out_filename>` and return `EXIT_FAILURE`
+* `<mode>` is either
+	* `c:` Compression mode
+		* `<filename>` will be compressed into `<out_filename>`
+	* `d:` Decompression mode
+		* `<filename>` will be decompressed into `<out_filename>`
+* If `<filename>` does not exist:
+	* Your program must print `No such file: <filename>`, where `<filename>` must be replaced by the actual filename
+	* Your program must return `EXIT_FAILURE`
+* `<out_filename>` must be created. If it already exists:
+	* Your program must print `File already exists: <filename>`, where `<filename>` must be replaced by the actual filename
+	* Your program must return `EXIT_FAILURE`
+* If the number of arguments is not correct, your program must print `Usage: huffman <mode>` `<filename> <out_filename>` and return `EXIT_FAILURE`
