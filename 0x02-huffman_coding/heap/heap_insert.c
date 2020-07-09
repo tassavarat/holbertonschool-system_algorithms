@@ -71,8 +71,6 @@ binary_tree_node_t *n_node(binary_tree_node_t *node, int n)
 				break;
 		}
 	}
-	if (bit_idx > -1)
-		return (NULL);
 	return (node);
 }
 
