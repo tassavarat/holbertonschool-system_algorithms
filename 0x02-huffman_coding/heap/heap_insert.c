@@ -42,8 +42,7 @@ binary_tree_node_t *heapify(int (*data_cmp)(void *, void *),
  * @node: pointer to root node
  * @n: one-indexed n-th node to find
  *
- * Return: pointer to specified node, last node in tree if n greater than
- * number of nodes in tree, or NULL on error
+ * Return: pointer to specified node or NULL on error
  */
 binary_tree_node_t *n_node(binary_tree_node_t *node, int n)
 {
@@ -72,6 +71,8 @@ binary_tree_node_t *n_node(binary_tree_node_t *node, int n)
 				break;
 		}
 	}
+	if (bit_idx > 0)
+		return (NULL);
 	return (node);
 }
 
