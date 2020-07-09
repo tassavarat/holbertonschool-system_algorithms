@@ -16,11 +16,11 @@ binary_tree_node_t *restore_heapify(int (*data_cmp)(void *, void *),
 	if (!data_cmp || !node)
 		return (NULL);
 	do {
-		least = NULL;
+		lg = NULL;
 		if (node->left && data_cmp(node->data, node->left->data) >= 0)
-			least = node->left;
+			lg = node->left;
 		if (node->right && data_cmp(node->data, node->right->data) >= 0 &&
-				(!least || data_cmp(least->data, node->right->data) > 0))
+				(!lg || data_cmp(lg->data, node->right->data) > 0))
 			lg = node->right;
 		if (lg)
 			node = swap_nodes(node, lg);
