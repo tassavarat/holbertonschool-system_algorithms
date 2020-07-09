@@ -35,7 +35,7 @@ binary_tree_node_t *restore_heapify(int (*data_cmp)(void *, void *),
  *
  * node containing original data of root will be freed
  *
- * Return: data or exactracted root node
+ * Return: data of exactracted root node
  */
 void *extract_root(heap_t *heap)
 {
