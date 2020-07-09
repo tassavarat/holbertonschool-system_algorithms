@@ -48,7 +48,7 @@ binary_tree_node_t *n_node(binary_tree_node_t *node, int n)
 {
 	int bit_idx, mask;
 
-	if (!node || n < 1)
+	if (!node || n < 0)
 		return (NULL);
 
 	for (bit_idx = 0; 1 << (bit_idx + 1) <=  n; ++bit_idx)
