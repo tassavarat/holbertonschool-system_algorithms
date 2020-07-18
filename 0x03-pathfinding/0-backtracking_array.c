@@ -98,6 +98,9 @@ queue_t *backtracking_array(char **map, int rows, int cols,
 		return (NULL);
 	if (dfs_array(q, dir, 0, 0, map, rows, cols, start->x, start->y,
 				target) == 1)
+	{
+		queue_delete(q);
 		return (NULL);
+	}
 	return (q);
 }
