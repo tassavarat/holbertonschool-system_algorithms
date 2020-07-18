@@ -5,13 +5,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-enum
+/**
+ * enum cardinal_dir - cardinal direction indexes for dir array
+ * @EAST: east index
+ * @SOUTH: south index
+ * @WEST: west index
+ * @NORTH: north index
+ * @SIZE: size of dir array
+ */
+enum cardinal_dir
 {
 	EAST,
 	SOUTH,
 	WEST,
 	NORTH,
-	LIM
+	SIZE
 };
 
 /**

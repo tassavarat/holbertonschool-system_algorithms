@@ -48,7 +48,7 @@ int dfs_array(queue_t *q, point_t *dir, int prev_dir_x, int prev_dir_y,
 	printf("Checking coordinates [%i, %i]\n", x, y);
 	if (x == target->x && y == target->y)
 		return (queue_wrapper(q, x, y));
-	for (i = 0; i < LIM; ++i)
+	for (i = 0; i < SIZE; ++i)
 		if ((dir[i].x + prev_dir_x != 0 || dir[i].y + prev_dir_y != 0) &&
 				dfs_array(q, dir, dir[i].x, dir[i].y, map, rows, cols,
 					x + dir[i].x, y + dir[i].y, target) == 0)
@@ -90,7 +90,7 @@ queue_t *backtracking_array(char **map, int rows, int cols,
 		point_t const *start, point_t const *target)
 {
 	queue_t *q;
-	point_t dir[LIM];
+	point_t dir[SIZE];
 
 	if (!map || !*map || rows < 1 || cols < 1 || !start || !target)
 		return (NULL);
