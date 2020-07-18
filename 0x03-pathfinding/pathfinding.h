@@ -2,7 +2,17 @@
 #define PATHFINDING_H
 
 #include "queues.h"
+#include <stdio.h>
 #include <stdlib.h>
+
+enum
+{
+	EAST,
+	SOUTH,
+	WEST,
+	NORTH,
+	LIM
+};
 
 /**
  * struct point_s - Structure storing coordinates
