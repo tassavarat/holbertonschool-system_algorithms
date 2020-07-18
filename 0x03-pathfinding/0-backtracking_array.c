@@ -92,7 +92,7 @@ queue_t *backtracking_array(char **map, int rows, int cols,
 	queue_t *q;
 	point_t dir[SIZE];
 
-	if (!map || !*map || rows < 1 || cols < 1 || !start || !target)
+	if (!map || rows < 1 || cols < 1 || !start || !target)
 		return (NULL);
 	if (init(&q, dir) == 1)
 		return (NULL);
