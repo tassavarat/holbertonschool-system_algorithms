@@ -56,6 +56,7 @@ int main(void)
 	};
 	point_t start = { 0, 13 };
 	point_t target = { 5, 20 };
+	/* point_t target = { 1, 12 }; */
 	queue_t *path;
 
 	path = backtracking_array((char **)map, 21, 21, &start, &target);

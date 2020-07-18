@@ -16,8 +16,7 @@ int queue_wrapper(queue_t *q, int x, int y)
 	if (pt == NULL)
 		return (1);
 	pt->x = x, pt->y = y;
-	if (queue_push_front(q, pt) == NULL)
-		return (1);
+	queue_push_front(q, pt);
 	return (0);
 }
 
