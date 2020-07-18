@@ -37,13 +37,11 @@ int queue_wrapper(queue_t *q, int x, int y)
  * Return: 0 on success, 1 on failure
  */
 int dfs_array(queue_t *q, point_t *dir, int prev_dir_x, int prev_dir_y,
-		char **map, int rows, int cols, int x, int y,
-		point_t const *target)
+		char **map, int rows, int cols, int x, int y, point_t const *target)
 {
 	int i;
 
-	if (x < 0 || x >= cols || y < 0 || y >= rows ||
-			map[y][x] == '1')
+	if (x < 0 || x >= cols || y < 0 || y >= rows || map[y][x] == '1')
 		return (1);
 	printf("Checking coordinates [%i, %i]\n", x, y);
 	if (x == target->x && y == target->y)
@@ -96,8 +94,7 @@ queue_t *backtracking_array(char **map, int rows, int cols,
 		return (NULL);
 	if (init(&q, dir) == 1)
 		return (NULL);
-	if (dfs_array(q, dir, 0, 0, map, rows, cols, start->x, start->y,
-				target) == 1)
+	if (dfs_array(q, dir, 0, 0, map, rows, cols, start->x, start->y, target) == 1)
 	{
 		queue_delete(q);
 		return (NULL);
