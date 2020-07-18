@@ -8,7 +8,7 @@
  *
  * Return: 0 on success, 1 on failure
  */
-int queue_wrapper(queue_t **q, int x, int y)
+int queue_wrapper(queue_t *q, int x, int y)
 {
 	point_t *pt;
 
@@ -16,7 +16,7 @@ int queue_wrapper(queue_t **q, int x, int y)
 	if (pt == NULL)
 		return (1);
 	pt->x = x, pt->y = y;
-	if (queue_push_front(*q, pt) == NULL)
+	if (queue_push_front(q, pt) == NULL)
 		return (1);
 	return (0);
 }
@@ -36,7 +36,7 @@ int queue_wrapper(queue_t **q, int x, int y)
  *
  * Return: 0 on success, 1 on failure
  */
-int dfs_array(queue_t **q, point_t *dir, int prev_dir_x, int prev_dir_y,
+int dfs_array(queue_t *q, point_t *dir, int prev_dir_x, int prev_dir_y,
 		char **map, int rows, int cols, int x, int y,
 		point_t const *target)
 {
@@ -96,7 +96,7 @@ queue_t *backtracking_array(char **map, int rows, int cols,
 		return (NULL);
 	if (init(&q, dir) == 1)
 		return (NULL);
-	if (dfs_array(&q, dir, 0, 0, map, rows, cols, start->x, start->y,
+	if (dfs_array(q, dir, 0, 0, map, rows, cols, start->x, start->y,
 				target) == 1)
 	{
 		queue_delete(q);
