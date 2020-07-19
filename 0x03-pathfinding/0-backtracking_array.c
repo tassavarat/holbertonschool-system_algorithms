@@ -55,8 +55,8 @@ int dfs_array(queue_t *q, point_t *dir, int **visited, char **map, int rows,
 	if (x < 0 || x >= cols || y < 0 || y >= rows || map[y][x] == '1' ||
 			visited[y][x] == 1)
 		return (1);
-	printf("Checking coordinates [%i, %i]\n", x, y);
 	visited[y][x] = 1;
+	printf("Checking coordinates [%i, %i]\n", x, y);
 	if (x == target->x && y == target->y)
 		return (queue_wrapper(q, x, y));
 	for (i = 0; i < SIZE; ++i)
