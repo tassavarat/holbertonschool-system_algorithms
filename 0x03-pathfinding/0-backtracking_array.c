@@ -1,6 +1,18 @@
 #include "pathfinding.h"
 
 /**
+ * free_2d - free memory allocated for 2-D array
+ * @a: 2-D array to free
+ * @size: size of 2-D array
+ */
+void free_2d(int **a, int size)
+{
+	while (size)
+		free(a[--size]);
+	free(a);
+}
+
+/**
  * queue_wrapper - wrapper used to call queue_push_front
  * @q: queue to push into
  * @x: point x coordinate
@@ -25,8 +37,7 @@ int queue_wrapper(queue_t *q, int x, int y)
  * dfs_array - traverse through array until target coordinates found
  * @q: pointer to queue to populate
  * @dir: pointer to array containing x-y cardinal directions
- * @prev_dir_x: previous cardinal x direction
- * @prev_dir_y: previous cardinal y direction
+ * @visited: array containing visited coordinates represented as 1's
  * @map: pointer to 2-D array to search
  * @rows: number of rows in map
  * @cols: number of columns in map
@@ -36,33 +47,39 @@ int queue_wrapper(queue_t *q, int x, int y)
  *
  * Return: 0 on success, 1 on failure
  */
-int dfs_array(queue_t *q, point_t *dir, int prev_dir_x, int prev_dir_y,
-		char **map, int rows, int cols, int x, int y, point_t const *target)
+int dfs_array(queue_t *q, point_t *dir, int **visited, char **map, int rows,
+		int cols, int x, int y, point_t const *target)
 {
 	int i;
 
-	if (x < 0 || x >= cols || y < 0 || y >= rows || map[y][x] == '1')
+	if (x < 0 || x >= cols || y < 0 || y >= rows || map[y][x] == '1' ||
+			visited[y][x] == 1)
 		return (1);
 	printf("Checking coordinates [%i, %i]\n", x, y);
+	visited[y][x] = 1;
 	if (x == target->x && y == target->y)
 		return (queue_wrapper(q, x, y));
 	for (i = 0; i < SIZE; ++i)
-		if ((dir[i].x + prev_dir_x != 0 || dir[i].y + prev_dir_y != 0) &&
-				dfs_array(q, dir, dir[i].x, dir[i].y, map, rows, cols,
-					x + dir[i].x, y + dir[i].y, target) == 0)
+		if (dfs_array(q, dir, visited, map, rows, cols, x + dir[i].x,
+					y + dir[i].y, target) == 0)
 			return (queue_wrapper(q, x, y));
 	return (1);
 }
 
 /**
- * init - create queue and initialise point array
+ * init - initialise relevant variables
  * @q: double pointer to queue being allocated
  * @dir: pointer to array to initialise
+ * @visited: double array
+ * @rows: rows in visited array
+ * @cols: columns in visited array
  *
  * Return: 0 on success, 1 on failure
  */
-int init(queue_t **q, point_t *dir)
+int init(queue_t **q, point_t *dir, int ***visited, int rows, int cols)
 {
+	int i;
+
 	*q = queue_create();
 	if (*q == NULL)
 		return (1);
@@ -70,6 +87,15 @@ int init(queue_t **q, point_t *dir)
 	dir[SOUTH].x = 0, dir[SOUTH].y = 1;
 	dir[WEST].x = -1, dir[WEST].y = 0;
 	dir[NORTH].x = 0, dir[NORTH].y = -1;
+	*visited = malloc(rows * sizeof(**visited));
+	if (*visited == NULL)
+		return (1);
+	for (i = 0; i < rows; ++i)
+	{
+		(*visited)[i] = calloc(cols, sizeof(***visited));
+		if ((*visited)[i] == NULL)
+			return (1);
+	}
 	return (0);
 }
 
@@ -88,16 +114,19 @@ queue_t *backtracking_array(char **map, int rows, int cols,
 		point_t const *start, point_t const *target)
 {
 	queue_t *q;
+	int **visited;
 	point_t dir[SIZE];
 
 	if (!map || rows < 1 || cols < 1 || !start || !target)
 		return (NULL);
-	if (init(&q, dir) == 1)
+	if (init(&q, dir, &visited, rows, cols) == 1)
 		return (NULL);
-	if (dfs_array(q, dir, 0, 0, map, rows, cols, start->x, start->y, target) == 1)
+	if (dfs_array(q, dir, visited, map, rows, cols, start->x, start->y,
+				target) == 1)
 	{
 		queue_delete(q);
-		return (NULL);
+		q = NULL;
 	}
+	free_2d(visited, rows);
 	return (q);
 }

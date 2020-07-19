@@ -54,12 +54,21 @@ int main(void)
 		"100000100000000010001",
 		"111110111111111111111"
 	};
+	/* char *map[5] = { */
+	/* 	"00001", */
+	/* 	"10010", */
+	/* 	"10010", */
+	/* 	"10010", */
+	/* 	"10010" */
+	/* }; */
 	point_t start = { 0, 13 };
 	point_t target = { 5, 20 };
-	/* point_t target = { 1, 12 }; */
+	/* point_t start = { 0, 0 }; */
+	/* point_t target = { 4, 4 }; */
 	queue_t *path;
 
 	path = backtracking_array((char **)map, 21, 21, &start, &target);
+	/* path = backtracking_array((char **)map, 5, 5, &start, &target); */
 	if (!path)
 	{
 		fprintf(stderr, "Failed to retrieve path\n");
