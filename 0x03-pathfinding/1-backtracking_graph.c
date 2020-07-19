@@ -7,7 +7,7 @@
  * @cur: pointer to current vertex node
  * @target_content: string to search for
  *
- * Return: queue containing nodes from start to target or NULL on error
+ * Return: queue with content string from start to target node or NULL on error
  */
 queue_node_t *dfs_graph(queue_t *q, int *visited, const vertex_t *cur,
 		char *target_content)
@@ -32,7 +32,7 @@ queue_node_t *dfs_graph(queue_t *q, int *visited, const vertex_t *cur,
  * @start: pointer to starting vertex
  * @target: pointer to target vertex
  *
- * Return: queue containing nodes from start to target or NULL on error
+ * Return: queue with content string from start to target node or NULL on error
  */
 queue_t *backtracking_graph(graph_t *graph, vertex_t const *start,
 		vertex_t const *target)
