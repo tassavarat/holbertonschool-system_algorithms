@@ -5,6 +5,7 @@
 #include "queues.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 /**
  * enum cardinal_dir - cardinal direction indexes for dir array
