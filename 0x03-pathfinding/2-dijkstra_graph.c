@@ -1,11 +1,32 @@
 #include "pathfinding.h"
 
-queue_t *bfs_graph(queue_t *bfs_q, int *visited, const vertex_t *start,
+/**
+ * _dequeue - free the head node of a queue
+ * @q: double pointer to head node
+ */
+void _dequeue(queue_t *q)
+{
+	queue_node_t *tmp;
+
+	if (q)
+	{
+		tmp = q->front;
+		q->front = q->front->next;
+		free(tmp);
+	}
+}
+
+queue_t *bfs_graph(int *visited, const vertex_t *start,
 		char *target_content)
 {
+	queue_t *bfs_q;
 	edge_t *e;
+	/* queue_node_t *tmp; */
 	size_t i;
 
+	bfs_q = queue_create();
+	if (bfs_q == NULL)
+		return (NULL);
 	visited[start->index] = 1;
 	printf("%s\n", start->content);
 	e = start->edges;
@@ -33,9 +54,10 @@ queue_t *bfs_graph(queue_t *bfs_q, int *visited, const vertex_t *start,
 					e = e->next)
 				printf("e: %s\n", e->dest->content);
 			printf("popping: %s\n", ((vertex_t *)bfs_q->front->ptr)->content);
-			free(dequeue(bfs_q));
+			_dequeue(bfs_q);
 		}
 	} while(bfs_q->front != NULL);
+	queue_delete(bfs_q);
 	return (NULL);
 }
 
@@ -51,21 +73,18 @@ queue_t *bfs_graph(queue_t *bfs_q, int *visited, const vertex_t *start,
 queue_t *dijkstra_graph(graph_t *graph, vertex_t const *start,
 		vertex_t const *target)
 {
-	queue_t *bfs_q, *path;
+	queue_t *path;
 	int *visited;
 
 	if (!graph || !start || !target)
 		return (NULL);
-	bfs_q = queue_create();
-	if (bfs_q == NULL)
-		return (NULL);
 	visited = calloc(graph->nb_vertices, sizeof(*visited));
 	if (visited == NULL)
 		return (NULL);
-	if (bfs_graph(bfs_q, visited, start, target->content) == NULL)
+	if (bfs_graph(visited, start, target->content) == NULL)
 	{
-		queue_delete(bfs_q);
-		bfs_q = NULL;
+		path = NULL;
+		queue_delete(path);
 	}
 	free(visited);
 	return (path);
