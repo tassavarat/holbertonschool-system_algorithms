@@ -7,6 +7,14 @@
 #include <stdlib.h>
 #include <string.h>
 
+typedef struct pqueue_s
+{
+	edge_t *dest;
+	edge_t *src;
+	struct pqueue_s	*next;
+	int weight;
+} pqueue_t;
+
 /**
  * enum cardinal_dir - cardinal direction indexes for dir array
  * @EAST: east index
