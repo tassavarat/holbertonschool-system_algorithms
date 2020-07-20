@@ -2,7 +2,7 @@
 
 /**
  * _dequeue - free the head node of a queue
- * @q: double pointer to head node
+ * @q: pointer to head of queue
  */
 void _dequeue(queue_t *q)
 {
