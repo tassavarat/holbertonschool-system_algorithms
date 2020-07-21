@@ -21,7 +21,19 @@ queue_t *find_path(queue_t *path, pqueue_t *pq, edge_t *src, edge_t *e,
 {
 	pqueue_t *new_pq, *cur_pq;
 	edge_t *cur_e;
+	int weight;
 
+	for (cur_pq = pq; cur_pq; cur_pq = cur_pq->next)
+		printf("dest: %s src: %s (%i)\n", cur_pq->dest->dest->content,
+				cur_pq->src->dest->content, cur_pq->weight);
+	putchar('\n');
+	weight = src->weight + e->weight;
+	for (cur_pq = pq; cur_pq != NULL; cur_pq = cur_pq->next)
+		if (cur_pq->dest == e && weight > cur_pq->weight)
+		{
+			puts("new weight greater");
+			return (path);
+		}
 	/* printf("pushing: %s\n", e->dest->content); */
 	/* return (path); */
 	new_pq = malloc(sizeof(*new_pq));
@@ -30,8 +42,9 @@ queue_t *find_path(queue_t *path, pqueue_t *pq, edge_t *src, edge_t *e,
 	new_pq->dest = e;
 	new_pq->src = src;
 	new_pq->next = NULL;
-	new_pq->weight = e->weight;
-	printf("Checking %s, distance from %s is %i\n", new_pq->dest->dest->content, new_pq->src->dest->content, new_pq->weight);
+	new_pq->weight = src->weight + e->weight;
+	printf("Checking %s, distance from %s is %i\n", new_pq->dest->dest->content,
+			new_pq->src->dest->content, new_pq->weight);
 	for (cur_pq = pq; cur_pq->next && new_pq->weight > cur_pq->next->weight;
 			cur_pq = cur_pq->next)
 		;
@@ -39,7 +52,8 @@ queue_t *find_path(queue_t *path, pqueue_t *pq, edge_t *src, edge_t *e,
 		new_pq->next = cur_pq->next;
 	cur_pq->next = new_pq;
 	for (cur_pq = pq; cur_pq; cur_pq = cur_pq->next)
-		printf("dest: %s src: %s (%i)\n", cur_pq->dest->dest->content, cur_pq->src->dest->content, cur_pq->weight);
+		printf("dest: %s src: %s (%i)\n", cur_pq->dest->dest->content,
+				cur_pq->src->dest->content, cur_pq->weight);
 	putchar('\n');
 	return (path);
 }
@@ -50,22 +64,23 @@ queue_t *bfs_graph(queue_t *path, pqueue_t *pq, int *visited,
 	queue_t *bfs_q;
 	edge_t *e, *src;
 
+	e = start->edges;
+	if (e == NULL)
+		return (NULL);
 	bfs_q = queue_create();
 	if (bfs_q == NULL)
 		return (NULL);
 	visited[start->index] = 1;
 	/* printf("%s\n", start->content); */
-	e = start->edges;
-	if (e == NULL)
-		return (NULL);
 	src = pq->src;
 	do {
 		if (e)
 		{
+			if (find_path(path, pq, src, e, start, target_content) == NULL)
+				break;
 			if (visited[e->dest->index] == 0)
 			{
-				if (!queue_push_back(bfs_q, e) ||
-						!find_path(path, pq, src, e, start, target_content))
+				if (queue_push_back(bfs_q, e) == NULL)
 				{
 					path = NULL;
 					break;
@@ -122,7 +137,8 @@ queue_t *dijkstra_graph(graph_t *graph, vertex_t const *start,
 		return (NULL);
 	src_e->dest = (vertex_t *)start, src_e->next = NULL, src_e->weight = 0;
 	pq->dest = pq->src = src_e, pq->next = NULL;
-	printf("Checking %s, distance from %s is %i\n", pq->dest->dest->content, start->content, pq->weight);
+	printf("Checking %s, distance from %s is %i\n", pq->dest->dest->content,
+			start->content, pq->weight);
 	visited = calloc(graph->nb_vertices, sizeof(*visited));
 	if (visited == NULL)
 		return (NULL);
