@@ -9,7 +9,6 @@
  */
 queue_t *find_path(vertex_queue_t *cur)
 {
-	vertex_t *src;
 	queue_t *path;
 
 	if (!cur)
@@ -17,15 +16,14 @@ queue_t *find_path(vertex_queue_t *cur)
 	path = queue_create();
 	if (!path)
 		return (NULL);
-	if (!queue_push_front(path, strdup(cur->dest->content)))
-		return (NULL);
-	for (src = cur->src, cur = cur->prev; cur != NULL; cur = cur->prev)
-		if (cur->dest == src)
-		{
-			if (!queue_push_front(path, strdup(cur->dest->content)))
-				return (NULL);
-			src = cur->src;
-		}
+	while (1)
+	{
+		if (!queue_push_front(path, strdup(cur->dest->content)))
+			return (NULL);
+		if (cur == cur->vq_src)
+			break;
+		cur = cur->vq_src;
+	}
 	return (path);
 }
 
@@ -45,16 +43,12 @@ vertex_queue_t *create_vq_node(vertex_queue_t *cur, vertex_queue_t *src,
 	new = malloc(sizeof(*new));
 	if (!new)
 		return (NULL);
-	new->src = src->dest;
+	new->vq_src = src;
 	new->dest = dest->dest;
 	new->weight = src->weight + dest->weight;
-	new->prev = cur;
 	new->next = NULL;
 	if (cur->next != NULL)
-	{
-		cur->next->prev = new;
 		new->next = cur->next;
-	}
 	cur->next = new;
 	return (new);
 }
@@ -151,9 +145,10 @@ queue_t *dijkstra_graph(graph_t *graph, vertex_t const *start,
 	dest_added = calloc(graph->nb_vertices, sizeof(*dest_added));
 	if (!dest_added)
 		return (NULL);
-	vq->src = vq->dest = (vertex_t *)start;
+	vq->vq_src = vq;
+	vq->dest = (vertex_t *)start;
 	vq->weight = 0;
-	vq->prev = vq->next = NULL;
+	vq->next = NULL;
 	path = find_path(populate_queue(vq, start, target, visited, dest_added));
 	while (vq != NULL)
 	{
