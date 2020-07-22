@@ -171,8 +171,6 @@ queue_t *dijkstra_graph(graph_t *graph, vertex_t const *start,
 	vq->weight = 0;
 	vq->prev = vq->next = NULL;
 	path = find_path(populate_queue(vq, start, target, visited, dest_added));
-	if (!path)
-		return (NULL);
 	clean_up(vq, visited, dest_added);
 	return (path);
 }
