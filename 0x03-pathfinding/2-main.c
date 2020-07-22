@@ -53,7 +53,7 @@ int main(void)
 	graph_add_edge(graph, "Las Vegas", "Houston", 1227, BIDIRECTIONAL);
 	graph_add_edge(graph, "Houston", "Nashville", 666, BIDIRECTIONAL);
 	graph_add_edge(graph, "Nashville", "Washington", 566, BIDIRECTIONAL);
-	/* graph_add_edge(graph, "Nashville", "Miami", 818, BIDIRECTIONAL); */
+	graph_add_edge(graph, "Nashville", "Miami", 818, BIDIRECTIONAL);
 
 	path = dijkstra_graph(graph, start, target);
 	if (!path)
