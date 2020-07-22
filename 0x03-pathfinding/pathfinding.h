@@ -7,13 +7,22 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct pqueue_s
+/**
+ * struct vertex_queue_s - queue used for Dijkstra's algorithm
+ * @src: pointer to source vertex node
+ * @dest: pointer to destination vertex node
+ * @weight: weight of going from src to dest
+ * @prev: pointer to previous queue node
+ * @next: pointer to next queue node
+ */
+typedef struct vertex_queue_s
 {
-	edge_t *dest;
-	edge_t *src;
-	struct pqueue_s	*next;
+	vertex_t *src;
+	vertex_t *dest;
 	int weight;
-} pqueue_t;
+	struct vertex_queue_s *prev;
+	struct vertex_queue_s *next;
+} vertex_queue_t;
 
 /**
  * enum cardinal_dir - cardinal direction indexes for dir array

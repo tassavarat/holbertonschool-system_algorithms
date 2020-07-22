@@ -1,108 +1,143 @@
 #include "pathfinding.h"
 
 /**
- * _dequeue - free the head node of a queue
- * @q: pointer to head of queue
+ * clean_up - free dynamically allocated memory
+ * @vq: pointer to head node of queue to free
+ * @visited: pointer to array to free
+ * @dest_added: pointer to array to free
  */
-void _dequeue(queue_t *q)
+void clean_up(vertex_queue_t *vq, int *visited, int *dest_added)
 {
-	queue_node_t *tmp;
+	vertex_queue_t *tmp;
 
-	if (q)
+	while (vq != NULL)
 	{
-		tmp = q->front;
-		q->front = q->front->next;
+		tmp = vq;
+		vq = vq->next;
 		free(tmp);
 	}
+	free(visited);
+	free(dest_added);
 }
 
-queue_t *find_path(queue_t *path, pqueue_t *pq, edge_t *src, edge_t *e,
-		const vertex_t *start, char *target_content)
+/**
+ * find_path - find the shortest path from start to target vertices
+ * @cur: pointer to end of queue
+ *
+ * Return: queue with content string of stortest path from start to target node
+ * or NULL on error
+ */
+queue_t *find_path(vertex_queue_t *cur)
 {
-	pqueue_t *new_pq, *cur_pq;
-	edge_t *cur_e;
-	int weight;
+	vertex_t *src;
+	queue_t *path;
 
-	for (cur_pq = pq; cur_pq; cur_pq = cur_pq->next)
-		printf("dest: %s src: %s (%i)\n", cur_pq->dest->dest->content,
-				cur_pq->src->dest->content, cur_pq->weight);
-	putchar('\n');
-	weight = src->weight + e->weight;
-	for (cur_pq = pq; cur_pq != NULL; cur_pq = cur_pq->next)
-		if (cur_pq->dest == e && weight > cur_pq->weight)
-		{
-			puts("new weight greater");
-			return (path);
-		}
-	/* printf("pushing: %s\n", e->dest->content); */
-	/* return (path); */
-	new_pq = malloc(sizeof(*new_pq));
-	if (new_pq == NULL)
+	if (!cur)
 		return (NULL);
-	new_pq->dest = e;
-	new_pq->src = src;
-	new_pq->next = NULL;
-	new_pq->weight = src->weight + e->weight;
-	printf("Checking %s, distance from %s is %i\n", new_pq->dest->dest->content,
-			new_pq->src->dest->content, new_pq->weight);
-	for (cur_pq = pq; cur_pq->next && new_pq->weight > cur_pq->next->weight;
-			cur_pq = cur_pq->next)
-		;
-	if (cur_pq->next != NULL)
-		new_pq->next = cur_pq->next;
-	cur_pq->next = new_pq;
-	for (cur_pq = pq; cur_pq; cur_pq = cur_pq->next)
-		printf("dest: %s src: %s (%i)\n", cur_pq->dest->dest->content,
-				cur_pq->src->dest->content, cur_pq->weight);
-	putchar('\n');
-	return (path);
-}
-
-queue_t *bfs_graph(queue_t *path, pqueue_t *pq, int *visited,
-		const vertex_t *start, char *target_content)
-{
-	queue_t *bfs_q;
-	edge_t *e, *src;
-
-	e = start->edges;
-	if (e == NULL)
+	path = queue_create();
+	if (!path)
 		return (NULL);
-	bfs_q = queue_create();
-	if (bfs_q == NULL)
+	if (!queue_push_front(path, strdup(cur->dest->content)))
 		return (NULL);
-	visited[start->index] = 1;
-	/* printf("%s\n", start->content); */
-	src = pq->src;
+	/* printf("pushing %s\n", cur->dest->content); */
+	src = cur->src;
+	/* printf("checking for %s\n", src->content); */
+	cur = cur->prev;
 	do {
-		if (e)
+		if (cur->dest == src)
 		{
-			if (find_path(path, pq, src, e, start, target_content) == NULL)
-				break;
-			if (visited[e->dest->index] == 0)
-			{
-				if (queue_push_back(bfs_q, e) == NULL)
-				{
-					path = NULL;
-					break;
-				}
-				visited[e->dest->index] = 1;
-			}
-			e = e->next;
+			if (!queue_push_front(path, strdup(cur->dest->content)))
+				return (NULL);
+			/* printf("pushing %s\n", cur->dest->content); */
+			src = cur->src;
+			/* printf("checking for %s\n", src->content); */
 		}
-		else
-		{
-			src = bfs_q->front->ptr;
-			for (e = src->dest->edges; e &&
-					visited[e->dest->index] == 1; e = e->next)
-				;
-			if (e)
-				continue;
-			/* printf("popping: %s\n", ((vertex_t *)bfs_q->front->ptr)->content); */
-			_dequeue(bfs_q);
-		}
-	} while (bfs_q->front != NULL);
-	queue_delete(bfs_q);
+		cur = cur->prev;
+	} while (cur != NULL);
 	return (path);
+}
+
+/**
+ * insert_vq_node - insert node into queue sorted by ascending weight
+ * @head: pointer to head node of queue
+ * @src: pointer to queue node to be used as source value for new node
+ * @dest: pointer to edge node to be used as dest value for new node
+ * @dest_added: array to track if destination has been added to queue
+ *
+ * Return: queue node of given dest with lowest weight, NULL on failure
+ */
+vertex_queue_t *insert_vq_node(vertex_queue_t *head, vertex_queue_t *src,
+		edge_t *dest, int *dest_added)
+{
+	vertex_queue_t *cur, *del, *tmp, *new;
+
+	if (!head)
+		return (NULL);
+	for (cur = head; cur->next != NULL &&
+			src->weight + dest->weight > cur->next->weight; cur = cur->next)
+		if (dest->dest == cur->next->dest)
+			return (cur->next);
+	if (dest_added[dest->dest->index] == 1)
+	{
+		for (del = cur; del->dest != dest->dest; tmp = del, del = del->next)
+			;
+		tmp->next = del->next;
+		free(del);
+	}
+	new = malloc(sizeof(*new));
+	if (!new)
+		return (NULL);
+	new->src = src->dest;
+	new->dest = dest->dest;
+	new->weight = src->weight + dest->weight;
+	new->prev = cur;
+	new->next = NULL;
+	if (cur->next != NULL)
+	{
+		cur->next->prev = new;
+		new->next = cur->next;
+	}
+	cur->next = new;
+	dest_added[new->dest->index] = 1;
+	/* for (cur = head; cur != NULL; cur = cur->next) */
+	/*	printf("src: %s\tdest: %s\tweight: %i\n", cur->src->content, */
+	/*			cur->dest->content, cur->weight); */
+	/* putchar('\n'); */
+	return (new);
+}
+
+/**
+ * populate_queue - populate vertex_queue struct for dijkstra traversal
+ * @vq_head: pointer to queue head node
+ * @start: pointer to start vertex
+ * @target: pointer to target vertex
+ * @visited: array used to track visited vertices
+ * @dest_added: array to track if destination has been added to queue
+ *
+ * Return: tail of queue, NULL on failure
+ */
+vertex_queue_t *populate_queue(vertex_queue_t *vq_head, const vertex_t *start,
+		const vertex_t *target, int *visited, int *dest_added)
+{
+	vertex_queue_t *vq_cur;
+	edge_t *e_cur;
+
+	if (!vq_head || !visited)
+		return (NULL);
+	for (vq_cur = vq_head; vq_cur != NULL; vq_cur = vq_cur->next)
+	{
+		/* printf("vertex: %s\n", vq_cur->dest->content); */
+		if (vq_cur->dest == target)
+			return (vq_cur);
+		for (e_cur = vq_cur->dest->edges; e_cur != NULL; e_cur = e_cur->next)
+			if (visited[e_cur->dest->index] != 1 &&
+					!insert_vq_node(vq_head, vq_cur, e_cur, dest_added))
+				return (NULL);
+		visited[vq_cur->dest->index] = 1;
+		printf("Checking %s, distance from %s is %i\n", vq_cur->dest->content,
+				start->content, vq_cur->weight);
+	}
+	return (vq_head);
 }
 
 /**
@@ -117,37 +152,27 @@ queue_t *bfs_graph(queue_t *path, pqueue_t *pq, int *visited,
 queue_t *dijkstra_graph(graph_t *graph, vertex_t const *start,
 		vertex_t const *target)
 {
+	vertex_queue_t *vq;
+	int *visited, *dest_added;
 	queue_t *path;
-	pqueue_t *pq;
-	edge_t *src_e;
-	int *visited;
 
 	if (!graph || !start || !target)
 		return (NULL);
-	path = queue_create();
-	if (path == NULL)
+	vq = malloc(sizeof(*vq));
+	if (!vq)
 		return (NULL);
-	if (queue_push_front(path, start->content) == NULL)
-		return (NULL);
-	pq = malloc(sizeof(*pq));
-	if (pq == NULL)
-		return (NULL);
-	src_e = malloc(sizeof(*src_e));
-	if (src_e == NULL)
-		return (NULL);
-	src_e->dest = (vertex_t *)start, src_e->next = NULL, src_e->weight = 0;
-	pq->dest = pq->src = src_e, pq->next = NULL;
-	printf("Checking %s, distance from %s is %i\n", pq->dest->dest->content,
-			start->content, pq->weight);
 	visited = calloc(graph->nb_vertices, sizeof(*visited));
-	if (visited == NULL)
+	if (!visited)
 		return (NULL);
-	if (bfs_graph(path, pq, visited, start, target->content) == NULL)
-	{
-		queue_delete(path);
-		path = NULL;
-	}
-	free(visited);
-	/* free pq and src_e */
+	dest_added = calloc(graph->nb_vertices, sizeof(*dest_added));
+	if (!dest_added)
+		return (NULL);
+	vq->src = vq->dest = (vertex_t *)start;
+	vq->weight = 0;
+	vq->prev = vq->next = NULL;
+	path = find_path(populate_queue(vq, start, target, visited, dest_added));
+	if (!path)
+		return (NULL);
+	clean_up(vq, visited, dest_added);
 	return (path);
 }
