@@ -137,7 +137,7 @@ vertex_queue_t *populate_queue(vertex_queue_t *vq_head, const vertex_t *start,
 				return (NULL);
 		visited[vq_cur->dest->index] = 1;
 	}
-	return (vq_head);
+	return (NULL);
 }
 
 /**
