@@ -126,6 +126,8 @@ vertex_queue_t *populate_queue(vertex_queue_t *vq_head, const vertex_t *start,
 		return (NULL);
 	for (vq_cur = vq_head; vq_cur != NULL; vq_cur = vq_cur->next)
 	{
+		printf("Checking %s, distance from %s is %i\n", vq_cur->dest->content,
+				start->content, vq_cur->weight);
 		/* printf("vertex: %s\n", vq_cur->dest->content); */
 		if (vq_cur->dest == target)
 			return (vq_cur);
@@ -134,8 +136,6 @@ vertex_queue_t *populate_queue(vertex_queue_t *vq_head, const vertex_t *start,
 					!insert_vq_node(vq_head, vq_cur, e_cur, dest_added))
 				return (NULL);
 		visited[vq_cur->dest->index] = 1;
-		printf("Checking %s, distance from %s is %i\n", vq_cur->dest->content,
-				start->content, vq_cur->weight);
 	}
 	return (vq_head);
 }
