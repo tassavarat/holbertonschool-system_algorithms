@@ -92,7 +92,6 @@ vertex_queue_t *insert_vq_node(vertex_queue_t *head, vertex_queue_t *src,
 /**
  * populate_queue - populate vertex_queue struct for dijkstra traversal
  * @vq_head: pointer to queue head node
- * @start: pointer to start vertex
  * @target: pointer to target vertex
  * @visited: array used to track visited vertices
  * @dest_added: array to track if destination has been added to queue
