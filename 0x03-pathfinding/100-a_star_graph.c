@@ -99,8 +99,8 @@ vertex_queue_t *insert_vq_node(vertex_queue_t *head, vertex_queue_t *src,
  *
  * Return: tail of queue, NULL on failure
  */
-vertex_queue_t *populate_queue(vertex_queue_t *vq_head, const vertex_t *start,
-		const vertex_t *target, int *visited, int *dest_added)
+vertex_queue_t *populate_queue(vertex_queue_t *vq_head, const vertex_t *target,
+		int *visited, int *dest_added)
 {
 	vertex_queue_t *vq_cur;
 	edge_t *e_cur;
@@ -109,8 +109,8 @@ vertex_queue_t *populate_queue(vertex_queue_t *vq_head, const vertex_t *start,
 		return (NULL);
 	for (vq_cur = vq_head; vq_cur != NULL; vq_cur = vq_cur->next)
 	{
-		printf("Checking %s, distance from %s is %i\n", vq_cur->dest->content,
-				start->content, vq_cur->weight);
+		printf("Checking %s, distance to %s is %lu\n", vq_cur->dest->content,
+				target->content, (size_t) vq_cur->dist);
 		if (vq_cur->dest == target)
 			return (vq_cur);
 		for (e_cur = vq_cur->dest->edges; e_cur != NULL; e_cur = e_cur->next)
@@ -157,7 +157,7 @@ queue_t *a_star_graph(graph_t *graph, vertex_t const *start,
 	vq->dist = euclidean_dist(target->x, target->y, vq->vq_src->dest->x,
 			vq->vq_src->dest->y);
 	vq->next = NULL;
-	path = find_path(populate_queue(vq, start, target, visited, dest_added));
+	path = find_path(populate_queue(vq, target, visited, dest_added));
 	while (vq != NULL)
 	{
 		tmp = vq;
