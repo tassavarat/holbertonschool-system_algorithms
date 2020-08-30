@@ -39,7 +39,7 @@ int main(void)
 	nary_tree_insert(alex, "Documents");
 	nary_tree_insert(alex, "Applications");
 
-	printf("max depth: %lu\n", nary_tree_traverse(root, &print_node));
+	printf("ret depth: %lu\n", nary_tree_traverse(root, &print_node));
 
 	nary_tree_delete(root);
 
