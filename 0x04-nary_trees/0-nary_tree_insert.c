@@ -1,7 +1,7 @@
 #include "nary_trees.h"
 
 /**
- * nary_tree_insert - insert node into N-ary tree
+ * nary_tree_insert - insert node into n-ary tree
  * @parent: pointer to parent node
  * @str: string to store in inserted node
  *
