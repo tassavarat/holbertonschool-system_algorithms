@@ -1,5 +1,4 @@
 #include "nary_trees.h"
-#include <stdio.h>
 
 /**
  * common_ancestor - set common ancestor to given depth_info_t struct
