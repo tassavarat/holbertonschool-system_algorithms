@@ -22,6 +22,15 @@ typedef struct nary_tree_s
 	struct nary_tree_s  *next;
 } nary_tree_t;
 
+/**
+ * struct diam_info_s - information needed to determine diameter of n-ary tree
+ * @depth1: maximum depth of tree
+ * @depth2: second highest depth of tree
+ * @ancestor_depth: depth of common ancestor
+ * @max1: pointer to maximum depth node
+ * @max2: pointer to second highest depth node
+ * @ancestor: pointer to ancestor node
+ */
 typedef struct diam_info_s
 {
 	size_t depth1;

@@ -1,7 +1,11 @@
 #include "nary_trees.h"
 #include <stdio.h>
 
-size_t common_ancestor(depth_info_t *diam)
+/**
+ * common_ancestor - set common ancestor to given depth_info_t struct
+ * @diam: pointer to depth_info_t struct to set
+ */
+void common_ancestor(depth_info_t *diam)
 {
 	size_t depth1 = diam->depth1, depth2 = diam->depth2;
 	nary_tree_t *p1 = diam->max1, *p2 = diam->max2;
@@ -13,14 +17,17 @@ size_t common_ancestor(depth_info_t *diam)
 		else if (depth2 > depth1)
 			--depth2, p2 = p2->parent;
 	}
-	/* printf("depth1: %lu\ndepth2: %lu\n", depth1, depth2); */
 	while (p1 != p2)
 		--depth1, p1 = p1->parent, p2 = p2->parent;
-	/* printf("depth1: %lu\np1: %s\np2: %s\n", depth1, p1->content, p2->content); */
-	return (diam->depth1 + diam->depth2 - 2 * depth1 + 1);
+	diam->ancestor_depth = depth1;
 }
 
-depth_info_t tree_depth(nary_tree_t const *root, depth_info_t *diam)
+/**
+ * tree_depth - set relevant depth information to given depth_info_t struct
+ * @root: pointer to root node of tree
+ * @diam: pointer to depth_info_t struct to set
+ */
+void tree_depth(nary_tree_t const *root, depth_info_t *diam)
 {
 	static size_t depth;
 	static nary_tree_t *tmp;
@@ -61,9 +68,14 @@ depth_info_t tree_depth(nary_tree_t const *root, depth_info_t *diam)
 	{
 		--depth;
 	}
-	return (*diam);
 }
 
+/**
+ * nary_tree_diameter - find diameter of n-ary tree
+ * @root: pointer to root node
+ *
+ * Return: diameter of tree
+ */
 size_t nary_tree_diameter(nary_tree_t const *root)
 {
 	depth_info_t diam;
@@ -72,9 +84,6 @@ size_t nary_tree_diameter(nary_tree_t const *root)
 		return (0);
 	memset(&diam, 0, sizeof(diam));
 	tree_depth(root, &diam);
-	/* printf("depth: %lu\n", diam.depth1); */
-	/* printf("depth2: %lu\n", diam.depth2); */
-	/* printf("max1: %s\n", diam.max1->content); */
-	/* printf("max2: %s\n", diam.max2->content); */
-	return (common_ancestor(&diam));
+	common_ancestor(&diam);
+	return (diam.depth1 + diam.depth2 - 2 * diam.ancestor_depth + 1);
 }
