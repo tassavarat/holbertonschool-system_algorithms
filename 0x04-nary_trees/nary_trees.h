@@ -22,12 +22,14 @@ typedef struct nary_tree_s
 	struct nary_tree_s  *next;
 } nary_tree_t;
 
-typedef struct depth_info_s
+typedef struct diam_info_s
 {
-	size_t max;
-	size_t max2;
-	nary_tree_t *max_parent;
-	nary_tree_t *max_parent2;
+	size_t depth1;
+	size_t depth2;
+	size_t ancestor_depth;
+	nary_tree_t *max1;
+	nary_tree_t *max2;
+	nary_tree_t *ancestor;
 } depth_info_t;
 
 nary_tree_t *nary_tree_insert(nary_tree_t *parent, char const *str);

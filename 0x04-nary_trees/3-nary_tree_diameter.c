@@ -1,10 +1,27 @@
 #include "nary_trees.h"
 #include <stdio.h>
 
-depth_info_t tree_depth(nary_tree_t const *root, depth_info_t *depth_s)
+size_t common_ancestor(depth_info_t *diam)
 {
-	/* static size_t depth, max_depth, max_depth2; */
-	/* static nary_tree_t *parent, *max_parent, *max_parent2; */
+	size_t depth1 = diam->depth1, depth2 = diam->depth2;
+	nary_tree_t *p1 = diam->max1, *p2 = diam->max2;
+
+	while (depth1 != depth2)
+	{
+		if (depth1 > depth2)
+			--depth1, p1 = p1->parent;
+		else if (depth2 > depth1)
+			--depth2, p2 = p2->parent;
+	}
+	/* printf("depth1: %lu\ndepth2: %lu\n", depth1, depth2); */
+	while (p1 != p2)
+		--depth1, p1 = p1->parent, p2 = p2->parent;
+	/* printf("depth1: %lu\np1: %s\np2: %s\n", depth1, p1->content, p2->content); */
+	return (diam->depth1 + diam->depth2 - 2 * depth1 + 1);
+}
+
+depth_info_t tree_depth(nary_tree_t const *root, depth_info_t *diam)
+{
 	static size_t depth;
 	static nary_tree_t *parent;
 
@@ -13,53 +30,44 @@ depth_info_t tree_depth(nary_tree_t const *root, depth_info_t *depth_s)
 	while (root)
 	{
 		++depth;
-		tree_depth(root->children, depth_s);
+		tree_depth(root->children, diam);
 		root = root->next;
 	}
-	if (depth_s->max_parent != parent)
+	if (diam->max1 != parent)
 	{
-		if (depth_s->max <= depth)
+		if (diam->depth1 <= depth)
 		{
-			puts("set");
-			/* max_depth2 = max_depth, max_depth = depth; */
-			/* max_parent2 = max_parent, max_parent = parent; */
-
-			depth_s->max2 = depth_s->max, depth_s->max = depth;
-			depth_s->max_parent2 = depth_s->max_parent, depth_s->max_parent = parent;
+			diam->depth2 = diam->depth1, diam->depth1 = depth;
+			diam->max2 = diam->max1, diam->max1 = parent;
 		}
-		else if (depth_s->max2 < depth)
+		else if (diam->depth2 < depth)
 		{
-			/* max_depth2 = depth; */
-			/* max_parent2 = parent; */
-
-			depth_s->max2 = depth;
-			depth_s->max_parent2 = parent;
+			diam->depth2 = depth, diam->max2 = parent;
 		}
 	}
-	/* if (depth == 0) */
-	/* { */
-	/* 	printf("max_depth: %lu\n", max_depth); */
-	/* 	printf("max_depth2: %lu\n", max_depth2); */
-	/* 	printf("max_parent: %s\n", max_parent->content); */
-	/* 	printf("max_parent2: %s\n", max_parent2->content); */
-	/* 	max_depth2 = max_depth = 0; */
-	/* 	max_parent = NULL; */
-	/* } */
-	/* else */
-	--depth;
-	return (*depth_s);
+	if (depth == 0)
+	{
+		diam->max1 = diam->max1->children;
+		diam->max2 = diam->max2->children;
+	}
+	else
+	{
+		--depth;
+	}
+	return (*diam);
 }
 
 size_t nary_tree_diameter(nary_tree_t const *root)
 {
-	depth_info_t depth_s;
+	depth_info_t diam;
 
-	depth_s.max2 = depth_s.max = 0;
-	depth_s.max_parent2 = depth_s.max_parent = NULL;
-	tree_depth(root, &depth_s);
-	printf("depth_s.max: %lu\n", depth_s.max);
-	printf("depth_s.max2: %lu\n", depth_s.max2);
-	printf("depth_s.max_parent: %s\n", depth_s.max_parent->content);
-	printf("depth_s.max_parent2: %s\n", depth_s.max_parent2->content);
-	return (0);
+	if (!root)
+		return (0);
+	memset(&diam, 0, sizeof(diam));
+	tree_depth(root, &diam);
+	/* printf("depth: %lu\n", diam.depth1); */
+	/* printf("depth2: %lu\n", diam.depth2); */
+	/* printf("max1: %s\n", diam.max1->content); */
+	/* printf("max2: %s\n", diam.max2->content); */
+	return (common_ancestor(&diam));
 }
