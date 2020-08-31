@@ -23,32 +23,39 @@ size_t common_ancestor(depth_info_t *diam)
 depth_info_t tree_depth(nary_tree_t const *root, depth_info_t *diam)
 {
 	static size_t depth;
-	static nary_tree_t *parent;
+	static nary_tree_t *tmp;
+	nary_tree_t *root_bak;
 
 	if (root)
-		parent = (nary_tree_t *)root->parent;
+		root_bak = tmp = (nary_tree_t *)root;
 	while (root)
 	{
 		++depth;
 		tree_depth(root->children, diam);
 		root = root->next;
 	}
-	if (diam->max1 != parent)
+	if (diam->max1 != tmp->parent)
 	{
 		if (diam->depth1 <= depth)
 		{
 			diam->depth2 = diam->depth1, diam->depth1 = depth;
-			diam->max2 = diam->max1, diam->max1 = parent;
+			diam->max2 = diam->max1, diam->max1 = tmp->parent;
 		}
 		else if (diam->depth2 < depth)
 		{
-			diam->depth2 = depth, diam->max2 = parent;
+			diam->depth2 = depth, diam->max2 = tmp->parent;
 		}
 	}
 	if (depth == 0)
 	{
-		diam->max1 = diam->max1->children;
-		diam->max2 = diam->max2->children;
+		if (diam->max1)
+			diam->max1 = diam->max1->children;
+		else
+			diam->depth1 = 1, diam->max1 = root_bak;
+		if (diam->max2)
+			diam->max2 = diam->max2->children;
+		else
+			diam->depth2 = 1, diam->max2 = root_bak;
 	}
 	else
 	{
